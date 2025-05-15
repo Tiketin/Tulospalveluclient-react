@@ -1,13 +1,15 @@
 import {Form, FormText, Table, Button, Modal} from 'react-bootstrap';
 import '../Styles.css';
 import React, {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const Statistics = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleMenu = () => {
-    history.push('/menu')
+    navigate('/menu')
   }
 
 
@@ -29,7 +31,7 @@ const Statistics = () => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
         json = JSON.parse(xmlhttp.responseText);
         if (json.numOfRows > 0) { // something found
-          console.log('Pelaajia löytyi');
+          console.log('Pelaajia löytyi /Statistics');
           console.log(json);
 
           for (let i in json.rows) {
@@ -52,7 +54,7 @@ const Statistics = () => {
       }
     };
     xmlhttp.open('GET',
-        'https://rocky-cliffs-72708.herokuapp.com/api/players?group=' +
+        apiUrl + '/api/players?group=' +
         localStorage.getItem('group'), true);
     xmlhttp.send();
   };
@@ -109,7 +111,7 @@ const Statistics = () => {
                   11 +
                   tuloksetJSON.rows[i].p12 * 12) / heitotlkm;
 
-              if (tuloksetJSON.rows[0].pelatutlkm == 0) {
+              if (tuloksetJSON.rows[0].pelatutlkm === 0) {
                 voittoprosentti = 0;
                 osumatarkkuus = 0;
                 pistekeskiarvo = 0;
@@ -146,7 +148,7 @@ const Statistics = () => {
         }
       };
       xmlhttp.open("GET",
-          "https://rocky-cliffs-72708.herokuapp.com/api/player?group=" +
+          apiUrl + "/api/player?group=" +
           localStorage.getItem("group") + "&player=" + json.rows[i].nimi, true);
       xmlhttp.send();
     }

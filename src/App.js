@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {Route, useHistory} from 'react-router-dom'
+import {Route, Routes, useNavigate} from 'react-router-dom'
 
 import Login from './components/Login'
 import Register from './components/Register'
@@ -10,29 +10,28 @@ import Statistics from './components/Statistics'
 import Players from './components/Players'
 import Molkky from './components/Molkky'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios'
-import * as path from 'path';
 
 const App = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    history.push("/login")
-  })
+    navigate("/login");
+  }, []);
 
   return (
-      <div className="container">
-        <Route path="/login" component={Login}/>
-        <Route path="/menu" component={Menu}/>
-        <Route path="/settings" component={Settings}/>
-        <Route path="/newgame" component={NewGame}/>
-        <Route path="/statistics" component={Statistics}/>
-        <Route path="/players" component={Players}/>
-        <Route path="/molkky" component={Molkky}/>
-        <Route path="/register" component={Register}/>
-
-      </div>
-  )
-}
+    <div className="container">
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/menu" element={<Menu />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/newgame" element={<NewGame />} />
+        <Route path="/statistics" element={<Statistics />} />
+        <Route path="/players" element={<Players />} />
+        <Route path="/molkky" element={<Molkky />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </div>
+  );
+};
 
 export default App

@@ -2,19 +2,22 @@ import {Col, Container, Form, FormText, Row, Table} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import '../Styles.css';
 import React, {useEffect, useRef, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 /**
  * @author Onni Lukkarila
  */
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const Players = () => {
 
   const [newPlayer, setNewPlayer] = useState();
   const [validated, setValidated] = useState(false);
   const [playerTable, setPlayerTable] = useState();
-  const history = useHistory();
+  const navigate = useNavigate();
   const table = useRef();
+  const hasFetched = useRef(false);
   let json;
   let players = [];
   let player;
@@ -32,7 +35,7 @@ const Players = () => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
         json = JSON.parse(xmlhttp.responseText);
         if (json.numOfRows > 0) { // something found
-          console.log('Pelaajia löytyi');
+          console.log('Pelaajia löytyi /players');
           console.log(json);
           for (let i in json.rows) {
             player = {nimi: json.rows[i].nimi, checkbox: false};
@@ -55,7 +58,7 @@ const Players = () => {
 
     };
     xmlhttp.open('GET',
-        'https://rocky-cliffs-72708.herokuapp.com/api/players?group=' +
+        apiUrl + '/api/players?group=' +
         localStorage.getItem('group'), true);
     xmlhttp.send();
   };
@@ -73,7 +76,7 @@ const Players = () => {
       console.log(body);
       let xmlhttp = new XMLHttpRequest();
       xmlhttp.open('POST',
-          'https://rocky-cliffs-72708.herokuapp.com/api/newplayer', true);
+          apiUrl + '/api/newplayer', true);
       xmlhttp.setRequestHeader('Content-Type', 'application/json');
       xmlhttp.send(JSON.stringify(body));
       setTimeout(function() {
@@ -98,15 +101,18 @@ const Players = () => {
       localStorage.setItem("player" + i, playersToAdd[i]);
     }
     localStorage.setItem("playerAmount", playerAmount.toString());
-    history.push('/molkky');
+    navigate('/molkky');
   };
 
   const handleBack = () =>{
-    history.push("/newgame")
+    navigate("/newgame")
   }
 
   useEffect(() => {
-    getPlayers()
+    if (!hasFetched.current) {
+    getPlayers();
+    hasFetched.current = true;
+    }
   }, []);
 
   return (

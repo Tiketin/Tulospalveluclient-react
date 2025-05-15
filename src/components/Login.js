@@ -1,9 +1,10 @@
 import React, {useRef, useState} from 'react';
 import {Container, Form, FormText} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
 import { useEffect } from 'react';
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const Login = () => {
 
@@ -16,7 +17,7 @@ const Login = () => {
   const [validated, setValidated] = useState(false);
   let json;
   let xmlhttp = new XMLHttpRequest();
-  let history = useHistory();
+  let navigate = useNavigate();
   useEffect(() => {
     if(localStorage.getItem("mode") === "dark"){
       document.body.style.backgroundImage = "url('./images/darkmode.jpg')";
@@ -29,7 +30,7 @@ const Login = () => {
   }, []);
   /**
    * Hankkii ryhmän tunnukset tietokannasta.
-   */
+   */ 
   const getGroup = event => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
@@ -61,7 +62,8 @@ const Login = () => {
         }
       }
     };
-    xmlhttp.open('GET', 'https://rocky-cliffs-72708.herokuapp.com/api/login?group=' + newEmail + '&password=' + newPassword, true);
+    console.log(apiUrl + '/api/login?group=' + newEmail + '&password=' + newPassword);
+    xmlhttp.open('GET', apiUrl + '/api/login?group=' + newEmail + '&password=' + newPassword, true);
     xmlhttp.send();
     setValidated(true);
   };
@@ -87,11 +89,11 @@ const Login = () => {
 
 
   const handleRoute = () =>{
-    history.push("/menu");
+    navigate("/menu");
   }
 
   const handleRegister = () =>{
-    history.push("/register")
+    navigate("/register")
   }
 
   return (
