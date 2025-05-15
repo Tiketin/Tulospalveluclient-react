@@ -1,10 +1,11 @@
 import React, {useRef, useState} from 'react';
 import {Container, Form} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
 import { useEffect } from 'react';
 
+const apiUrl = process.env.REACT_APP_API_URL;
 
 const Register = () => {
 
@@ -18,7 +19,7 @@ const Register = () => {
   const [validated, setValidated] = useState(false);
   let json;
   let xmlhttp = new XMLHttpRequest();
-  let history = useHistory();
+  let navigate = useNavigate();
 
 
 
@@ -54,7 +55,7 @@ const Register = () => {
         }
       }
     };
-    xmlhttp.open('GET', 'https://rocky-cliffs-72708.herokuapp.com/api/login?group=' + newEmail + '&password=' + newPassword, true);
+    xmlhttp.open('GET', apiUrl + '/api/login?group=' + newEmail + '&password=' + newPassword, true);
     xmlhttp.send();
     setValidated(true);
   };
@@ -81,7 +82,7 @@ const Register = () => {
         console.log(body)
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.open('POST',
-            'https://rocky-cliffs-72708.herokuapp.com/api/newgroup', true);
+            apiUrl + '/api/newgroup', true);
         xmlhttp.setRequestHeader('Content-Type', 'application/json');
         xmlhttp.send(JSON.stringify(body));
         localStorage.setItem('group', newEmail);
@@ -106,11 +107,11 @@ const Register = () => {
   };
 
   const handleRoute = () =>{
-    history.push("/menu");
+    navigate("/menu");
   }
 
   const handleLogin = () => {
-    history.push("/login")
+    navigate("/login")
   }
 
   return (

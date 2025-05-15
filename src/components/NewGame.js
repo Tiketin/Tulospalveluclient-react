@@ -2,18 +2,18 @@ import {Container, Form, FormText} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import '../Styles.css';
 import React, {useEffect, useRef} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 const NewGame = () => {
     const h1 = useRef();
-  const history = useHistory();
+  const navigate = useNavigate();
   const handleSettings = () => {
-    history.push('/menu')
+    navigate('/menu')
   }
 
   const handleMolkky = () => {
-    history.push('/players')
+    navigate('/players')
   }
     /**
      * Checks the current mode and makes changes if necessary

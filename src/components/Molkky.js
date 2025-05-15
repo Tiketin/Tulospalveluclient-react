@@ -7,8 +7,10 @@ import {
   Form,
   Row,
 } from 'react-bootstrap';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 let scores;
 let strikes;
@@ -23,7 +25,7 @@ let winner;
 let someoneHasWon;
 
 const Molkky = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [nameGrid, setNameGrid] = useState();
   const [scoreGrid, setScoreGrid] = useState();
   const [gameInstruction, setgameInstruction] = useState(
@@ -248,7 +250,7 @@ const Molkky = () => {
 
       let xmlhttp = new XMLHttpRequest();
       xmlhttp.open("POST",
-          "https://rocky-cliffs-72708.herokuapp.com/api/newgame", true);
+          apiUrl + "/api/newgame", true);
       xmlhttp.setRequestHeader("Content-Type", "application/json");
       xmlhttp.send(JSON.stringify(body));
       alert("Peli tallennettu!");
@@ -258,7 +260,7 @@ const Molkky = () => {
   }
 
   const endGame = () => {
-    if(window.confirm("Haluatko lopettaa pelin?")) history.push("/menu");
+    if(window.confirm("Haluatko lopettaa pelin?")) navigate("/menu");
   }
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 import '../Styles.css';
 import React, {useEffect, useRef} from 'react';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 /**
  * @author Henrik Aho, Nikke Tikka
@@ -11,11 +11,11 @@ import {useHistory} from 'react-router-dom';
  */
 
 const Settings = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const h1 = useRef();
   const h2 = useRef();
   const handleSettings = () => {
-    history.push('/menu')
+    navigate('/menu')
   }
     /**
      * Checks the current mode and makes changes if necessary
