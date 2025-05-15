@@ -17,6 +17,7 @@ const Players = () => {
   const [playerTable, setPlayerTable] = useState();
   const navigate = useNavigate();
   const table = useRef();
+  const hasFetched = useRef(false);
   let json;
   let players = [];
   let player;
@@ -34,7 +35,7 @@ const Players = () => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
         json = JSON.parse(xmlhttp.responseText);
         if (json.numOfRows > 0) { // something found
-          console.log('Pelaajia löytyi');
+          console.log('Pelaajia löytyi /players');
           console.log(json);
           for (let i in json.rows) {
             player = {nimi: json.rows[i].nimi, checkbox: false};
@@ -108,7 +109,10 @@ const Players = () => {
   }
 
   useEffect(() => {
-    getPlayers()
+    if (!hasFetched.current) {
+    getPlayers();
+    hasFetched.current = true;
+    }
   }, []);
 
   return (

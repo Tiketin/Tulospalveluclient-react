@@ -31,7 +31,7 @@ const Statistics = () => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
         json = JSON.parse(xmlhttp.responseText);
         if (json.numOfRows > 0) { // something found
-          console.log('Pelaajia löytyi');
+          console.log('Pelaajia löytyi /Statistics');
           console.log(json);
 
           for (let i in json.rows) {

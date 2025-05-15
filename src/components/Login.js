@@ -62,6 +62,7 @@ const Login = () => {
         }
       }
     };
+    console.log(apiUrl + '/api/login?group=' + newEmail + '&password=' + newPassword);
     xmlhttp.open('GET', apiUrl + '/api/login?group=' + newEmail + '&password=' + newPassword, true);
     xmlhttp.send();
     setValidated(true);
