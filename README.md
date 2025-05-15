@@ -5,5 +5,9 @@ Tulospalvelu on tehty yhteensä noin kuuden viikon aikana ryhmätyönä Metropol
 Projektissa on asiakas- sekä palvelinpuolen toteutus. Sovelluksessa on mahdollista rekisteröidä oma ryhmätunnus, jonka avulla voit tallentaa pelattuja pelejä ulkoiseen tietokantaan. Asiakaspuoli toteutettiin React-projektina ja siinä käytettiin JavaScript, HTML sekä CSS kieliä. Sovelluksen ulkoasu on suunniteltu mobiililaitteella käytettäväksi.
 
 
-Palvelinpuolen toteutus: https://github.com/OnniL/tulospalvelupalvelin
+Palvelinpuolen toteutus: https://github.com/Tiketin/Tulospalvelupalvelin
 # Tulospalveluclient-react
+
+Ajo:
+-npm install
+-npm start
