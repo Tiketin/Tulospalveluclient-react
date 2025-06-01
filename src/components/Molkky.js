@@ -100,50 +100,50 @@ const Molkky = () => {
     if (parseInt(result) === 0) {
       strikes[playerToUpdate]++;
     } else {
-      scores[playerToUpdate] += parseInt(result);
       strikes[playerToUpdate] = 0;
-      switch (parseInt(result)) {
-        case 0:
-          playerScoreList[playerToUpdate]['p0']++;
-          break;
-        case 1:
-          playerScoreList[playerToUpdate]['p1']++;
-          break;
-        case 2:
-          playerScoreList[playerToUpdate]['p2']++;
-          break;
-        case 3:
-          playerScoreList[playerToUpdate]['p3']++;
-          break;
-        case 4:
-          playerScoreList[playerToUpdate]['p4']++;
-          break;
-        case 5:
-          playerScoreList[playerToUpdate]['p5']++;
-          break;
-        case 6:
-          playerScoreList[playerToUpdate]['p6']++;
-          break;
-        case 7:
-          playerScoreList[playerToUpdate]['p7']++;
-          break;
-        case 8:
-          playerScoreList[playerToUpdate]['p8']++;
-          break;
-        case 9:
-          playerScoreList[playerToUpdate]['p9']++;
-          break;
-        case 10:
-          playerScoreList[playerToUpdate]['p10']++;
-          break;
-        case 11:
-          playerScoreList[playerToUpdate]['p11']++;
-          break;
-        case 12:
-          playerScoreList[playerToUpdate]['p12']++;
-          break;
-        default: break;
-      }
+    }
+    scores[playerToUpdate] += parseInt(result);
+    switch (parseInt(result)) {
+      case 0:
+        playerScoreList[playerToUpdate]['p0']++;
+        break;
+      case 1:
+        playerScoreList[playerToUpdate]['p1']++;
+        break;
+      case 2:
+        playerScoreList[playerToUpdate]['p2']++;
+        break;
+      case 3:
+        playerScoreList[playerToUpdate]['p3']++;
+        break;
+      case 4:
+        playerScoreList[playerToUpdate]['p4']++;
+        break;
+      case 5:
+        playerScoreList[playerToUpdate]['p5']++;
+        break;
+      case 6:
+        playerScoreList[playerToUpdate]['p6']++;
+        break;
+      case 7:
+        playerScoreList[playerToUpdate]['p7']++;
+        break;
+      case 8:
+        playerScoreList[playerToUpdate]['p8']++;
+        break;
+      case 9:
+        playerScoreList[playerToUpdate]['p9']++;
+        break;
+      case 10:
+        playerScoreList[playerToUpdate]['p10']++;
+        break;
+      case 11:
+        playerScoreList[playerToUpdate]['p11']++;
+        break;
+      case 12:
+        playerScoreList[playerToUpdate]['p12']++;
+        break;
+      default: break;
     }
 
     if (scores[playerToUpdate] === 50) {
@@ -167,7 +167,6 @@ const Molkky = () => {
     event.preventDefault();
     let score;
     score = newScore;
-
     if (score > 12 || score < 0) {
       alert('Anna tulos väliltä 0-12!');
     } else {
