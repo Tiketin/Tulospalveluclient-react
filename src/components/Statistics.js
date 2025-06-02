@@ -1,6 +1,6 @@
 import {Form, FormText, Table, Button, Modal} from 'react-bootstrap';
 import '../Styles.css';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 
@@ -15,6 +15,7 @@ const Statistics = () => {
 
   const [playerTable, setPlayerTable] = useState();
   const [AdvancedPlayerTable, setAdvancedPlayerTable] = useState();
+  const hasFetched = useRef(false);
 
   let json;
   let tuloksetJSON;
@@ -155,8 +156,11 @@ const Statistics = () => {
   };
 
   useEffect(() => {
+    if (!hasFetched.current) {
     getPlayers();
     getPlayerStats();
+    hasFetched.current = true;
+    }
   }, []);
 
 
