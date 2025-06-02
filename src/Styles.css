@@ -47,6 +47,12 @@ body {
     flex-direction: column;
 }
 
+.scrollContainer {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
 h1 {
     transform: scale(1.5);
     text-align: center;
@@ -101,6 +107,48 @@ h1 {
     #tallennaNappi {
         transform: scale(0.5);
     }
+    #statsTable {
+    border: 0;
+  }
+
+  #statsTable thead {
+    display: none;
+  }
+
+  #statsTable tbody, 
+  #statsTable tr, 
+  #statsTable td {
+    display: block;
+    width: 100%;
+    display: grid !important;
+    align-items: stretch !important;
+    background-color: black;
+    padding: 0.2em !important;
+    overflow: scroll;
+    border-radius: 0.5em;
+  }
+
+  #statsTable td {
+    text-align: right;
+    position: relative;
+    background-color: navajowhite;
+    border: 2px solid rgba(0, 0, 0, 0.8);
+    padding: 0 0.4em !important;
+    font-weight: bold;
+    border-radius: 0.5em;
+    margin: 0 !important;
+  }
+
+  #statsTable td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    width: 45%;
+    padding-right: 1rem;
+    white-space: nowrap;
+    font-weight: bold;
+    text-align: left;
+  }
 }
 
 .wrapper {
@@ -218,7 +266,7 @@ ul {
 }
 
 h2 {
-    margin: 0 0 0.7em 0 !important;
+    margin: 0.7em 0 0.7em 0 !important;
     text-align: center;
     font-family: "Courier New";
 }
