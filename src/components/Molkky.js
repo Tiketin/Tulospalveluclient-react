@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
+import InputValidator from '../utils/InputValidator';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -167,7 +168,7 @@ const Molkky = () => {
     event.preventDefault();
     let score;
     score = newScore;
-    if (score > 12 || score < 0) {
+    if (!InputValidator.isMolkkyNumeric(score)) {
       alert('Anna tulos väliltä 0-12!');
     } else {
       allScores.push(score)
