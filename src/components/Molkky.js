@@ -26,6 +26,7 @@ let winner;
 let someoneHasWon;
 
 const Molkky = () => {
+  const h1 = useRef();
   const navigate = useNavigate();
   const [nameGrid, setNameGrid] = useState();
   const [scoreGrid, setScoreGrid] = useState();
@@ -264,12 +265,20 @@ const Molkky = () => {
   }
 
   useEffect(() => {
+    if(localStorage.getItem("mode") === "dark"){
+      document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
+      h1.current.style.color = "white";
+    }
+    else {
+      document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
+      h1.current.style.color = "black";
+    }
     showStartGrid();
   }, []);
 
   return (
       <Container className="my-auto">
-        <h1>Mölkky</h1>
+        <h1 ref={h1}>Mölkky</h1>
         <Container className="grid-container">
           <Row>
             {nameGrid}
