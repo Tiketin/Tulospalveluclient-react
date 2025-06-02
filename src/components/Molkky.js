@@ -293,7 +293,7 @@ const Molkky = () => {
             <Form.Label style={{fontWeight: "bold"}}>{gameInstruction}</Form.Label>
           </Col>
           <Col xs="auto">
-            <Form.Control type="text"
+            <Form.Control type="number"
                           value={newScore}
                           onChange={handleScoreChange}
                           placeholder="0-12"
