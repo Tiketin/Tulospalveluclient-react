@@ -10,13 +10,17 @@ import Statistics from './components/Statistics'
 import Players from './components/Players'
 import Molkky from './components/Molkky'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useLocation } from 'react-router-dom';
 
 const App = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    navigate("/login");
-  }, []);
+    if (location.pathname === "/" || location.pathname === "/#") {
+      navigate("/login");
+    }
+  }, [location.pathname]);
 
   return (
     <div className="container">

@@ -20,11 +20,11 @@ const Login = () => {
   let navigate = useNavigate();
   useEffect(() => {
     if(localStorage.getItem("mode") === "dark"){
-      document.body.style.backgroundImage = "url('./images/darkmode.jpg')";
+      document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
       h1.current.style.color = "white";
     }
     else {
-      document.body.style.backgroundImage = "url('./images/taustakuva.jpg')";
+      document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
       h1.current.style.color = "black";
     }
   }, []);

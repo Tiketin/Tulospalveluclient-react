@@ -16,6 +16,7 @@ const Statistics = () => {
   const [playerTable, setPlayerTable] = useState();
   const [AdvancedPlayerTable, setAdvancedPlayerTable] = useState();
   const hasFetched = useRef(false);
+  const h2 = useRef();
 
   let json;
   let tuloksetJSON;
@@ -156,6 +157,14 @@ const Statistics = () => {
   };
 
   useEffect(() => {
+    if(localStorage.getItem("mode") === "dark"){
+      document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
+      h2.current.style.color = "white";
+    }
+    else {
+      document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
+      h2.current.style.color = "black";
+    }
     if (!hasFetched.current) {
     getPlayers();
     getPlayerStats();
@@ -167,7 +176,7 @@ const Statistics = () => {
   return(
       <div>
         <div>
-          <h2>Ryhmän Statistiikka</h2>
+          <h2 ref={h2}>Ryhmän Statistiikka</h2>
         </div>
         <Table striped>
           <thead>
