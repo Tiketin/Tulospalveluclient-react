@@ -44,7 +44,8 @@ const Molkky = () => {
   };
 
   const scrollToBottom = () => {
-    scoresEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    scoresEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    window.scroll(0, 0);
   }
 
   const showStartGrid = () => {
@@ -265,6 +266,14 @@ const Molkky = () => {
   }
 
   useEffect(() => {
+    if(localStorage.getItem("mode") === "dark"){
+      document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
+      h1.current.style.color = "white";
+    }
+    else {
+      document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
+      h1.current.style.color = "black";
+    }
     showStartGrid();
     window.scroll(0, 0);
   }, []);
