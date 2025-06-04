@@ -11,7 +11,7 @@ import {useNavigate} from 'react-router-dom';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const Players = () => {
-
+  const h1 = useRef();
   const [newPlayer, setNewPlayer] = useState();
   const [validated, setValidated] = useState(false);
   const [playerTable, setPlayerTable] = useState();
@@ -109,6 +109,14 @@ const Players = () => {
   }
 
   useEffect(() => {
+    if(localStorage.getItem("mode") === "dark"){
+      document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
+      h1.current.style.color = "white";
+    }
+    else {
+      document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
+      h1.current.style.color = "black";
+    }
     if (!hasFetched.current) {
     getPlayers();
     hasFetched.current = true;
@@ -117,7 +125,7 @@ const Players = () => {
 
   return (
       <Container>
-        <h1>Valitse pelaajat</h1>
+        <h1 ref={h1}>Valitse pelaajat</h1>
         <Form noValidate validated={validated} onSubmit={addNewPlayer}>
           <Row className="align-items-center">
             <Col xs="auto">
