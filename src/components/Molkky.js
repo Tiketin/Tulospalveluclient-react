@@ -265,15 +265,8 @@ const Molkky = () => {
   }
 
   useEffect(() => {
-    if(localStorage.getItem("mode") === "dark"){
-      document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
-      h1.current.style.color = "white";
-    }
-    else {
-      document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
-      h1.current.style.color = "black";
-    }
     showStartGrid();
+    window.scroll(0, 0);
   }, []);
 
   return (
@@ -288,7 +281,9 @@ const Molkky = () => {
           {scoreGrid}
           <div ref={scoresEndRef}/>
         </Container>
-        <Form noValidate validated={validated} onSubmit={addNewScore}>
+        <Form noValidate validated={validated} onSubmit={addNewScore} onkeydown="if(event.keyCode === 13) {
+                alert('You have pressed Enter key, use submit button instead'); 
+                return false;">
           <Col xs="auto">
             <Form.Label style={{fontWeight: "bold"}}>{gameInstruction}</Form.Label>
           </Col>
