@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
+import InputValidator from '../utils/InputValidator';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -25,6 +26,7 @@ let winner;
 let someoneHasWon;
 
 const Molkky = () => {
+  const h1 = useRef();
   const navigate = useNavigate();
   const [nameGrid, setNameGrid] = useState();
   const [scoreGrid, setScoreGrid] = useState();
@@ -42,7 +44,8 @@ const Molkky = () => {
   };
 
   const scrollToBottom = () => {
-    scoresEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    scoresEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    window.scroll(0, 0);
   }
 
   const showStartGrid = () => {
@@ -100,50 +103,50 @@ const Molkky = () => {
     if (parseInt(result) === 0) {
       strikes[playerToUpdate]++;
     } else {
-      scores[playerToUpdate] += parseInt(result);
       strikes[playerToUpdate] = 0;
-      switch (parseInt(result)) {
-        case 0:
-          playerScoreList[playerToUpdate]['p0']++;
-          break;
-        case 1:
-          playerScoreList[playerToUpdate]['p1']++;
-          break;
-        case 2:
-          playerScoreList[playerToUpdate]['p2']++;
-          break;
-        case 3:
-          playerScoreList[playerToUpdate]['p3']++;
-          break;
-        case 4:
-          playerScoreList[playerToUpdate]['p4']++;
-          break;
-        case 5:
-          playerScoreList[playerToUpdate]['p5']++;
-          break;
-        case 6:
-          playerScoreList[playerToUpdate]['p6']++;
-          break;
-        case 7:
-          playerScoreList[playerToUpdate]['p7']++;
-          break;
-        case 8:
-          playerScoreList[playerToUpdate]['p8']++;
-          break;
-        case 9:
-          playerScoreList[playerToUpdate]['p9']++;
-          break;
-        case 10:
-          playerScoreList[playerToUpdate]['p10']++;
-          break;
-        case 11:
-          playerScoreList[playerToUpdate]['p11']++;
-          break;
-        case 12:
-          playerScoreList[playerToUpdate]['p12']++;
-          break;
-        default: break;
-      }
+    }
+    scores[playerToUpdate] += parseInt(result);
+    switch (parseInt(result)) {
+      case 0:
+        playerScoreList[playerToUpdate]['p0']++;
+        break;
+      case 1:
+        playerScoreList[playerToUpdate]['p1']++;
+        break;
+      case 2:
+        playerScoreList[playerToUpdate]['p2']++;
+        break;
+      case 3:
+        playerScoreList[playerToUpdate]['p3']++;
+        break;
+      case 4:
+        playerScoreList[playerToUpdate]['p4']++;
+        break;
+      case 5:
+        playerScoreList[playerToUpdate]['p5']++;
+        break;
+      case 6:
+        playerScoreList[playerToUpdate]['p6']++;
+        break;
+      case 7:
+        playerScoreList[playerToUpdate]['p7']++;
+        break;
+      case 8:
+        playerScoreList[playerToUpdate]['p8']++;
+        break;
+      case 9:
+        playerScoreList[playerToUpdate]['p9']++;
+        break;
+      case 10:
+        playerScoreList[playerToUpdate]['p10']++;
+        break;
+      case 11:
+        playerScoreList[playerToUpdate]['p11']++;
+        break;
+      case 12:
+        playerScoreList[playerToUpdate]['p12']++;
+        break;
+      default: break;
     }
 
     if (scores[playerToUpdate] === 50) {
@@ -167,8 +170,7 @@ const Molkky = () => {
     event.preventDefault();
     let score;
     score = newScore;
-
-    if (score > 12 || score < 0) {
+    if (!InputValidator.isMolkkyNumeric(score)) {
       alert('Anna tulos väliltä 0-12!');
     } else {
       allScores.push(score)
@@ -264,12 +266,21 @@ const Molkky = () => {
   }
 
   useEffect(() => {
+    if(localStorage.getItem("mode") === "dark"){
+      document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
+      h1.current.style.color = "white";
+    }
+    else {
+      document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
+      h1.current.style.color = "black";
+    }
     showStartGrid();
+    window.scroll(0, 0);
   }, []);
 
   return (
       <Container className="my-auto">
-        <h1>Mölkky</h1>
+        <h1 ref={h1}>Mölkky</h1>
         <Container className="grid-container">
           <Row>
             {nameGrid}
@@ -279,12 +290,14 @@ const Molkky = () => {
           {scoreGrid}
           <div ref={scoresEndRef}/>
         </Container>
-        <Form noValidate validated={validated} onSubmit={addNewScore}>
+        <Form noValidate validated={validated} onSubmit={addNewScore} onkeydown="if(event.keyCode === 13) {
+                alert('You have pressed Enter key, use submit button instead'); 
+                return false;">
           <Col xs="auto">
             <Form.Label style={{fontWeight: "bold"}}>{gameInstruction}</Form.Label>
           </Col>
           <Col xs="auto">
-            <Form.Control type="text"
+            <Form.Control type="number"
                           value={newScore}
                           onChange={handleScoreChange}
                           placeholder="0-12"

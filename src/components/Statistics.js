@@ -1,6 +1,6 @@
 import {Form, FormText, Table, Button, Modal} from 'react-bootstrap';
 import '../Styles.css';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 
@@ -15,6 +15,8 @@ const Statistics = () => {
 
   const [playerTable, setPlayerTable] = useState();
   const [AdvancedPlayerTable, setAdvancedPlayerTable] = useState();
+  const hasFetched = useRef(false);
+  const h2 = useRef();
 
   let json;
   let tuloksetJSON;
@@ -132,13 +134,13 @@ const Statistics = () => {
             console.log(advancedPlayers);
             setAdvancedPlayerTable(advancedPlayers.map((row, i) =>
                 <tr>
-                  <td>{row.nimi}</td>
-                  <td>{row.pelatutlkm}</td>
-                  <td>{row.voitotlkm}</td>
-                  <td>{row.voittoprosentti}</td>
-                  <td>{row.heitotlkm}</td>
-                  <td>{row.osumatarkkuus}</td>
-                  <td>{row.pistekeskiarvo}</td>
+                  <td data-label="Nimi">{row.nimi}</td>
+                  <td data-label="Ottelut">{row.pelatutlkm}</td>
+                  <td data-label="Voitot">{row.voitotlkm}</td>
+                  <td data-label="Voittoprosentti">{row.voittoprosentti}</td>
+                  <td data-label="Heitot">{row.heitotlkm}</td>
+                  <td data-label="Osumatarkkuus">{row.osumatarkkuus}</td>
+                  <td data-label="Pistekeskiarvo">{row.pistekeskiarvo}</td>
                 </tr>
             ));
 
@@ -155,32 +157,45 @@ const Statistics = () => {
   };
 
   useEffect(() => {
+    if(localStorage.getItem("mode") === "dark"){
+      document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
+      h2.current.style.color = "white";
+    }
+    else {
+      document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
+      h2.current.style.color = "black";
+    }
+    if (!hasFetched.current) {
     getPlayers();
     getPlayerStats();
+    hasFetched.current = true;
+    }
   }, []);
 
 
   return(
       <div>
         <div>
-          <h2>Ryhmän Statistiikka</h2>
+          <h2 ref={h2}>Ryhmän Statistiikka</h2>
         </div>
-        <Table striped>
-          <thead>
-          <tr>
-            <th>Nimi:</th>
-            <th>Ottelut:</th>
-            <th>Voitot:</th>
-            <th>Voittoprosentti:</th>
-            <th>Heitot:</th>
-            <th>Osumatarkkuus:</th>
-            <th>Pistekeskiarvo:</th>
-          </tr>
-          </thead>
-          <tbody>
-          {AdvancedPlayerTable}
-          </tbody>
-        </Table>
+        <div className="scrollContainer">
+          <Table striped id="statsTable">
+            <thead>
+            <tr>
+              <th>Nimi:</th>
+              <th>Ottelut:</th>
+              <th>Voitot:</th>
+              <th>Voittoprosentti:</th>
+              <th>Heitot:</th>
+              <th>Osumatarkkuus:</th>
+              <th>Pistekeskiarvo:</th>
+            </tr>
+            </thead>
+            <tbody>
+            {AdvancedPlayerTable}
+            </tbody>
+          </Table>
+        </div>
         <div className="backToMenu">
           <Button onClick={handleMenu} size="lg">Takaisin</Button>
         </div>
