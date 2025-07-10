@@ -7,7 +7,7 @@ Projektissa on asiakas- sekä palvelinpuolen toteutus. Sovelluksessa on mahdolli
 
 Palvelinpuolen toteutus: https://github.com/Tiketin/Tulospalvelupalvelin
 # Tulospalveluclient-react
-
+Muuta .env.example muotoon .env (.env on .gitignore:ssa, älä vie palvelimille!)
 Ajo:
 -npm install
 -npm start
