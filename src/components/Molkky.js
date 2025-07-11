@@ -24,6 +24,7 @@ let rows;
 let playerScoreList
 let winner;
 let someoneHasWon;
+let shortenNames;
 
 const Molkky = () => {
   const h1 = useRef();
@@ -52,6 +53,7 @@ const Molkky = () => {
     setNameGrid('');
     let player;
     let playerAmount = parseInt(localStorage.getItem('playerAmount'));
+    shortenNames = playerAmount > 5;
 
     scores = [];
     strikes = [];
@@ -94,9 +96,15 @@ const Molkky = () => {
       }
     }
     console.log(players);
-    setNameGrid(players.map((row) =>
-        <Col className="grid-item">{row + ': 0'} </Col>,
-    ));
+    if (shortenNames) {
+      setNameGrid(players.map((row) =>
+        <Col className="grid-item">{row.substring(0,3)}<br/>0</Col>,
+      ));
+    } else {
+      setNameGrid(players.map((row) =>
+        <Col className="grid-item">{row}<br/>0</Col>,
+      ));
+    } 
   };
 
   const updateScore = (playerToUpdate, result) => {
@@ -161,8 +169,13 @@ const Molkky = () => {
 
 
     console.log(playerScoreList)
-    setNameGrid(scores.map((row, i) =>
-        <Col className="grid-item">{players[i] + ': ' + scores[i]}</Col>));
+    if (shortenNames) {
+      setNameGrid(scores.map((row, i) =>
+        <Col className="grid-item">{players[i].substring(0,3)}<br/>{scores[i]}</Col>));
+    } else {
+      setNameGrid(scores.map((row, i) =>
+        <Col className="grid-item">{players[i]}<br/>{scores[i]}</Col>));
+    }
   };
 
   const addNewScore = (event) => {
@@ -200,6 +213,12 @@ const Molkky = () => {
           )
       );
       currentPlayer++;
+      console.log("CURRENTPLAYER: "+currentPlayer)
+      if (currentPlayer === players.length) {
+        currentPlayer = 0;
+        roundCounter++;
+        rows.push(roundCounter);
+      }
     }
     setgameInstruction('Anna pelaajan ' + players[currentPlayer] + ' tulos:')
     scrollToBottom();
