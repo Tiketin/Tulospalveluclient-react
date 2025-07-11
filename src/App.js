@@ -18,6 +18,7 @@ const App = () => {
 
   useEffect(() => {
     if (location.pathname === "/" || location.pathname === "/#") {
+      console.log("Build ID:", process.env.REACT_APP_BUILD_ID);
       navigate("/login");
     }
   }, [location.pathname]);
