@@ -213,7 +213,6 @@ const Molkky = () => {
           )
       );
       currentPlayer++;
-      console.log("CURRENTPLAYER: "+currentPlayer)
       if (currentPlayer === players.length) {
         currentPlayer = 0;
         roundCounter++;
