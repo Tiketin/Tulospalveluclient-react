@@ -178,30 +178,25 @@ const Molkky = () => {
     }
   };
 
-  const addNewScore = (event) => {
-
-    event.preventDefault();
-    let score;
-    score = newScore;
-    if (!InputValidator.isMolkkyNumeric(score)) {
-      alert('Anna tulos väliltä 0-12!');
-    } else {
-      allScores.push(score)
-      updateScore(currentPlayer, score);
-      setScoreGrid(rows.map((row) =>
-              <Row>
-                {scores.map((score, i) =>
-                    <Col className="grid-item" id={row + "" + i}>{allScores[(row - 1) * players.length + i]}</Col>)}
-              </Row>
-          )
-      );
-      currentPlayer++;
-      if (currentPlayer === players.length) {
-        currentPlayer = 0;
-        roundCounter++;
-        rows.push(roundCounter);
-      }
+  const addNewScore = (newScore) => {
+    console.log("Adding score:", newScore, typeof newScore);
+    let score = newScore;
+    allScores.push(score)
+    updateScore(currentPlayer, score);
+    setScoreGrid(rows.map((row) =>
+            <Row>
+              {scores.map((score, i) =>
+                  <Col className="grid-item" id={row + "" + i}>{allScores[(row - 1) * players.length + i]}</Col>)}
+            </Row>
+        )
+    );
+    currentPlayer++;
+    if (currentPlayer === players.length) {
+      currentPlayer = 0;
+      roundCounter++;
+      rows.push(roundCounter);
     }
+    
 
     while(playerLost[currentPlayer] === true) {
       allScores.push('X');
@@ -308,28 +303,32 @@ const Molkky = () => {
           {scoreGrid}
           <div ref={scoresEndRef}/>
         </Container>
-        <Form noValidate validated={validated} onSubmit={addNewScore} onkeydown="if(event.keyCode === 13) {
-                alert('You have pressed Enter key, use submit button instead'); 
-                return false;">
-          <Col xs="auto">
-            <Form.Label style={{fontWeight: "bold"}}>{gameInstruction}</Form.Label>
-          </Col>
-          <Col xs="auto">
-            <Form.Control type="number"
-                          value={newScore}
-                          onChange={handleScoreChange}
-                          placeholder="0-12"
-                          required>
-            </Form.Control>
-          </Col>
-          <Col xs="auto">
-            <Button variant="primary"
-                    type="submit"
-                    size="sm">Lisää tulos
-            </Button>
-          </Col>
-        </Form>
-        <ButtonToolbar>
+        <Container className='molkkyButtonContainer'>
+          <Row className='molkkyButtonRow'>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(7)}>7</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(9)}>9</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(8)}>8</Button></div>
+          </Row>
+          <Row className='molkkyButtonRow'>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(5)}>5</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(11)}>11</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(12)}>12</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(6)}>6</Button></div>
+          </Row>
+          <Row className='molkkyButtonRow'>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(3)}>3</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(10)}>10</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(4)}>4</Button></div>
+          </Row>
+          <Row className='molkkyButtonRow'>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(1)}>1</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(2)}>2</Button></div>
+          </Row>
+          <Row className='molkkyButtonRow'>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(0)}>OHI</Button></div>
+          </Row> 
+        </Container>
+        <ButtonToolbar className='molkkyButtonToolBar'>
           <Button style={{margin: "0.1em"}} size="me" onClick={saveGame} disabled={disable}>Tallenna</Button>
           <Button style={{margin: "0.1em"}} size="me" onClick={endGame}>Lopeta</Button>
         </ButtonToolbar>

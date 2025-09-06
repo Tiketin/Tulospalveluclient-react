@@ -235,7 +235,7 @@ ul {
     align-items: stretch !important;
     background-color: black;
     padding: 0.2em !important;
-    max-height: 250px;
+    max-height: 160px;
     overflow: scroll;
     border-radius: 0.5em;
 }
@@ -416,6 +416,37 @@ Form{
     align-items: center;
 }
 
+.molkkyButtonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
+.molkkyButtonToolBar {
+    margin-top: auto;
+    padding: 0.5rem;
+}
 
+.molkkyButtonRow {
 
+}
+
+.molkkyButton {
+    height: 30px;
+    width: 30px;
+    color: yellow;
+    background-color: yellow;
+    background-image: none;
+    background-repeat: no-repeat;
+    border: none !important;
+    font-size: 50px;
+    font-family: "Courier New" !important;
+    font-weight: bold !important;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    min-height: none;
+    align-items: center;
+    box-shadow: none !important;
+    margin: 0.5em !important;
+}
