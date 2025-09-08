@@ -114,49 +114,10 @@ const Molkky = () => {
       strikes[playerToUpdate] = 0;
     }
     scores[playerToUpdate] += parseInt(result);
-    switch (parseInt(result)) {
-      case 0:
-        playerScoreList[playerToUpdate]['p0']++;
-        break;
-      case 1:
-        playerScoreList[playerToUpdate]['p1']++;
-        break;
-      case 2:
-        playerScoreList[playerToUpdate]['p2']++;
-        break;
-      case 3:
-        playerScoreList[playerToUpdate]['p3']++;
-        break;
-      case 4:
-        playerScoreList[playerToUpdate]['p4']++;
-        break;
-      case 5:
-        playerScoreList[playerToUpdate]['p5']++;
-        break;
-      case 6:
-        playerScoreList[playerToUpdate]['p6']++;
-        break;
-      case 7:
-        playerScoreList[playerToUpdate]['p7']++;
-        break;
-      case 8:
-        playerScoreList[playerToUpdate]['p8']++;
-        break;
-      case 9:
-        playerScoreList[playerToUpdate]['p9']++;
-        break;
-      case 10:
-        playerScoreList[playerToUpdate]['p10']++;
-        break;
-      case 11:
-        playerScoreList[playerToUpdate]['p11']++;
-        break;
-      case 12:
-        playerScoreList[playerToUpdate]['p12']++;
-        break;
-      default: break;
-    }
-
+    const point = `p${parseInt(result)}`
+    console.log("JAA: "+playerToUpdate + " "+point)
+    playerScoreList[playerToUpdate][point]++
+    console.log("JOO: "+playerToUpdate + " "+point)
     if (scores[playerToUpdate] === 50) {
       if(!someoneHasWon) winnerFound();
       else alert(players[currentPlayer] + ' saavutti 50 pistettä!')
@@ -167,8 +128,32 @@ const Molkky = () => {
     }
 
 
-
     console.log(playerScoreList)
+    if (shortenNames) {
+      setNameGrid(scores.map((row, i) =>
+        <Col className="grid-item">{players[i].substring(0,3)}<br/>{scores[i]}</Col>));
+    } else {
+      setNameGrid(scores.map((row, i) =>
+        <Col className="grid-item">{players[i]}<br/>{scores[i]}</Col>));
+    }
+  };
+  
+  const removeScore = (playerToUpdate, result) => {
+    if (parseInt(result) === 0) {
+      strikes[playerToUpdate]--;
+    } else {
+      strikes[playerToUpdate] = 0;
+    }
+    scores[playerToUpdate] -= parseInt(result);
+    const point = `p${parseInt(result)}`;
+    playerScoreList[playerToUpdate][point]--;
+
+    if(someoneHasWon && winner === players[currentPlayer]) {
+      winner = null;
+      someoneHasWon = false;
+      setDisable(true)
+    } 
+
     if (shortenNames) {
       setNameGrid(scores.map((row, i) =>
         <Col className="grid-item">{players[i].substring(0,3)}<br/>{scores[i]}</Col>));
@@ -214,7 +199,57 @@ const Molkky = () => {
         rows.push(roundCounter);
       }
     }
-    setgameInstruction('Anna pelaajan ' + players[currentPlayer] + ' tulos:')
+    setgameInstruction('Anna pelaajan ' + players[currentPlayer] + ' tulos:');
+    scrollToBottom();
+  };
+
+  const backToPreviousScore = () => {
+    //If no scores to remove, stop
+    if (allScores.length === 0) return;
+
+    console.log("Back to previous player");
+
+    // Get the last score before removing it
+    const lastScore = allScores[allScores.length - 1];
+    //Remove the last score
+    allScores.pop();
+    currentPlayer--;
+    if(currentPlayer < 0) {
+      //Player length is one higher than last index
+      currentPlayer = players.length - 1;
+      roundCounter--;
+      //Removes last row
+      rows.pop();
+    }
+
+    removeScore(currentPlayer, lastScore);
+    
+
+    //Handle case where player was marked lost
+    while (playerLost[currentPlayer] === true && allScores.length > 0) {
+      allScores.pop();
+      currentPlayer--;
+      if (currentPlayer < 0) {
+        currentPlayer = players.length - 1;
+        roundCounter--;
+        rows.pop();
+      }
+    }
+    //Rebuild score grid
+    setScoreGrid(
+      rows.map((row) => (
+        <Row>
+          {scores.map((score, i) => (
+            <Col className="grid-item" id={row + "" + i}>
+              {allScores[(row - 1) * players.length + i]}
+            </Col>
+          ))}
+        </Row>
+      ))
+    );
+
+    //Update game instruction
+    setgameInstruction("Anna pelaajan " + players[currentPlayer] + " tulos:");
     scrollToBottom();
   };
 
@@ -322,7 +357,8 @@ const Molkky = () => {
             <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(2)}>2</Button></div>
           </Row>
           <Row className='molkkyButtonRow'>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(0)}>OHI</Button></div>
+            <div className="col"><Button className='molkkyButtonWide' onClick={() => backToPreviousScore()}>Taaksepäin</Button></div>
+            <div className="col"><Button className='molkkyButtonWide' onClick={() => addNewScore(0)}>OHI</Button></div>
           </Row> 
         </Container>
         <ButtonToolbar className='molkkyButtonToolBar'>
