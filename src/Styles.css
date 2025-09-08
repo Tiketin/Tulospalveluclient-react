@@ -467,3 +467,21 @@ Form{
     align-items: center;
     box-shadow: none !important;
 }
+
+.molkkyButtonWide {
+    margin: 0;
+    padding: 0 !important;
+    height: 56px;
+    width: 112px;
+    background-image: url('molkkybuttonwide.png');
+    background-repeat: no-repeat;
+    border: none !important;
+    font-family: "Courier New" !important;
+    font-weight: bold !important;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    min-height: none;
+    align-items: center;
+    box-shadow: none !important;
+}
