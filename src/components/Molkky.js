@@ -4,12 +4,10 @@ import {
   ButtonToolbar,
   Col,
   Container,
-  Form,
   Row,
 } from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
-import InputValidator from '../utils/InputValidator';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -32,22 +30,18 @@ const Molkky = () => {
   const [nameGrid, setNameGrid] = useState();
   const [scoreGrid, setScoreGrid] = useState();
   const [gameInstruction, setgameInstruction] = useState(
-      'Aloita antamalla pelaajan ' + localStorage.getItem('player0') + ' tulos:'
-  );
-  const [validated, setValidated] = useState(false);
-  const [newScore, setNewScore] = useState();
+      'Vuorossa: ' + localStorage.getItem('player0'));
   const [disable, setDisable] = useState(true);
   const scoresEndRef = useRef(null)
 
-  const handleScoreChange = (event) => {
-    console.log(event.target.value);
-    setNewScore(event.target.value);
-  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [scoreGrid]);
 
   const scrollToBottom = () => {
     scoresEndRef.current?.scrollIntoView({ behavior: "smooth" });
     window.scroll(0, 0);
-  }
+  };
 
   const showStartGrid = () => {
     setNameGrid('');
@@ -91,11 +85,8 @@ const Molkky = () => {
         scores.push(0);
         strikes.push(0);
         playerLost.push(false);
-        console.log(playerScoreList[0]['p0'])
-
       }
     }
-    console.log(players);
     if (shortenNames) {
       setNameGrid(players.map((row) =>
         <Col className="grid-item">{row.substring(0,3)}<br/>0</Col>,
@@ -114,21 +105,17 @@ const Molkky = () => {
       strikes[playerToUpdate] = 0;
     }
     scores[playerToUpdate] += parseInt(result);
-    const point = `p${parseInt(result)}`
-    console.log("JAA: "+playerToUpdate + " "+point)
-    playerScoreList[playerToUpdate][point]++
-    console.log("JOO: "+playerToUpdate + " "+point)
+    const point = `p${parseInt(result)}`;
+    playerScoreList[playerToUpdate][point]++;
     if (scores[playerToUpdate] === 50) {
       if(!someoneHasWon) winnerFound();
-      else alert(players[currentPlayer] + ' saavutti 50 pistettä!')
+      else alert(players[currentPlayer] + ' saavutti 50 pistettä!');
     } else if (scores[playerToUpdate] > 50) {
       scores[playerToUpdate] = 25;
     } else if (strikes[playerToUpdate] >= 3) {
       playerLost[playerToUpdate] = true;
     }
 
-
-    console.log(playerScoreList)
     if (shortenNames) {
       setNameGrid(scores.map((row, i) =>
         <Col className="grid-item">{players[i].substring(0,3)}<br/>{scores[i]}</Col>));
@@ -141,8 +128,9 @@ const Molkky = () => {
   const removeScore = (playerToUpdate, result) => {
     if (parseInt(result) === 0) {
       strikes[playerToUpdate]--;
-    } else {
-      strikes[playerToUpdate] = 0;
+      if (playerLost[playerToUpdate] === true) {
+        playerLost[playerToUpdate] = false;
+      }
     }
     scores[playerToUpdate] -= parseInt(result);
     const point = `p${parseInt(result)}`;
@@ -164,7 +152,6 @@ const Molkky = () => {
   };
 
   const addNewScore = (newScore) => {
-    console.log("Adding score:", newScore, typeof newScore);
     let score = newScore;
     allScores.push(score)
     updateScore(currentPlayer, score);
@@ -199,31 +186,35 @@ const Molkky = () => {
         rows.push(roundCounter);
       }
     }
-    setgameInstruction('Anna pelaajan ' + players[currentPlayer] + ' tulos:');
-    scrollToBottom();
+    setgameInstruction('Vuorossa: ' + players[currentPlayer]);
   };
 
   const backToPreviousScore = () => {
     //If no scores to remove, stop
     if (allScores.length === 0) return;
 
-    console.log("Back to previous player");
-
     // Get the last score before removing it
-    const lastScore = allScores[allScores.length - 1];
-    //Remove the last score
+    let lastScore = allScores[allScores.length - 1];
+    if(lastScore === 'X') {
+      allScores.pop();
+      currentPlayer--;
+      if(currentPlayer < 0) {
+        //Player length is one higher than last index
+        currentPlayer = players.length - 1;
+        roundCounter--;
+        rows.pop();
+      }
+      lastScore = allScores[allScores.length - 1];
+    }
     allScores.pop();
     currentPlayer--;
     if(currentPlayer < 0) {
-      //Player length is one higher than last index
       currentPlayer = players.length - 1;
       roundCounter--;
-      //Removes last row
       rows.pop();
     }
 
     removeScore(currentPlayer, lastScore);
-    
 
     //Handle case where player was marked lost
     while (playerLost[currentPlayer] === true && allScores.length > 0) {
@@ -248,9 +239,7 @@ const Molkky = () => {
       ))
     );
 
-    //Update game instruction
-    setgameInstruction("Anna pelaajan " + players[currentPlayer] + " tulos:");
-    scrollToBottom();
+    setgameInstruction("Vuorossa: " + players[currentPlayer]);
   };
 
   const winnerFound = () => {
@@ -285,18 +274,14 @@ const Molkky = () => {
               "p11": playerScoreList[i]['p11'],
               "p12": playerScoreList[i]['p12'],
             };
-        console.log("pelaaja tallennettu objektiin");
       }
 
-      console.log(winner)
       body["ryhman_nimi"] = localStorage.getItem('group');
       body["voittajan_nimi"] = winner;
 
       let today = new Date();
       body["pvm"] = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" +
           today.getDate();
-
-      console.log(body);
 
       let xmlhttp = new XMLHttpRequest();
       xmlhttp.open("POST",
@@ -336,6 +321,7 @@ const Molkky = () => {
           <div ref={scoresEndRef}/>
         </Container>
         <Container className='molkkyButtonContainer'>
+          <h3>{gameInstruction}</h3>
           <Row className='molkkyButtonRow'>
             <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(7)}>7</Button></div>
             <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(9)}>9</Button></div>
@@ -357,8 +343,8 @@ const Molkky = () => {
             <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(2)}>2</Button></div>
           </Row>
           <Row className='molkkyButtonRow'>
-            <div className="col"><Button className='molkkyButtonWide' onClick={() => backToPreviousScore()}>Taaksepäin</Button></div>
-            <div className="col"><Button className='molkkyButtonWide' onClick={() => addNewScore(0)}>OHI</Button></div>
+            <div className="col"><Button className='molkkyButtonWide' onClick={() => backToPreviousScore()}>Peruuta</Button></div>
+            <div className="col"><Button className='molkkyButtonWide' onClick={() => addNewScore(0)}>- Ohi -</Button></div>
           </Row> 
         </Container>
         <ButtonToolbar className='molkkyButtonToolBar'>
