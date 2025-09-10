@@ -166,7 +166,7 @@ const Players = () => {
             {playerTable}
             </tbody>
           </Table>
-          <Button onClick={handleMolkkyPlayerOrder} size="sm">Aloita peli</Button>
+          <Button onClick={handleMolkkyPlayerOrder} size="sm">Eteenpäin</Button>
         </Form>
 
         <Button size="lg" onClick={handleBack}>Takaisin</Button>

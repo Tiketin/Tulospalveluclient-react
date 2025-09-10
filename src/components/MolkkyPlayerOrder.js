@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   DndContext,
   closestCenter,
@@ -16,35 +16,41 @@ import {
 } from "@dnd-kit/sortable";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Container } from "react-bootstrap";
-import {Button} from 'react-bootstrap';
+import { Container, ButtonToolbar, Button, Table } from "react-bootstrap";
 import {useNavigate} from 'react-router-dom';
+import '../Styles.css';
 
-// Sortable item component
-function SortableItem({ id }) {
+// Sortable item (only name is draggable, index is fixed)
+function SortableItem({ id, index }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    padding: "12px",
-    margin: "8px 0",
-    borderRadius: "12px",
-    background: "#fff",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-    cursor: "grab",
-    touchAction: "none", // Needed for mobile drag
   };
 
   return (
-    <li ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {id}
+    <li ref={setNodeRef} style={style} {...attributes} {...listeners} className="sortable-item">
+      <span className="sortable-index"  >
+        {index + 1}
+      </span>
+      <span>{id}</span>
     </li>
   );
 }
 
+function shuffleArray(array) {
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 export default function DragList() {
+    const h2 = useRef();
     const navigate = useNavigate();
     const [players, setPlayers] = useState([]);
 
@@ -59,14 +65,24 @@ export default function DragList() {
         setPlayers(loadedPlayers);
     }, []);
 
-  // Enable mouse + touch + keyboard sensors
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(TouchSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
+    // Save players back to localStorage whenever order changes
+    useEffect(() => {
+      if (players.length > 0) {
+        localStorage.setItem("playerAmount", players.length);
+        players.forEach((player, i) => {
+        localStorage.setItem("player" + i, player);
+        });
+      }
+    }, [players]);
+
+    // Enable mouse + touch + keyboard sensors
+    const sensors = useSensors(
+      useSensor(PointerSensor),
+      useSensor(TouchSensor),
+      useSensor(KeyboardSensor, {
+        coordinateGetter: sortableKeyboardCoordinates,
+      })
+    );
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
@@ -81,13 +97,35 @@ export default function DragList() {
     }
   };
 
+  const shufflePlayers = () => {
+    setPlayers((prev) => shuffleArray(prev));
+  };
+
+  /**
+     * Checks the current mode and makes changes if necessary
+     */
+    useEffect(() => {
+      if(localStorage.getItem("mode") === "dark"){
+        document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
+        h2.current.style.color = "white";
+      }
+      else {
+        document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
+        h2.current.style.color = "black";
+      }
+    }, []);
+
+  const handleMolkkyGame = () => {
+    navigate('/molkky');
+  };
+
   const handleBack = () =>{
     navigate("/players")
   }
 
   return (
     <Container>
-      <h2>Valitse pelijärjestys</h2>
+      <h2 ref={h2}>Valitse heittojärjestys</h2>
       <div className="p-6">
         <DndContext
           sensors={sensors}
@@ -95,15 +133,19 @@ export default function DragList() {
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={players} strategy={verticalListSortingStrategy}>
-            <ul style={{ listStyle: "none", padding: 0 }}>
-              {players.map((item) => (
-                <SortableItem key={item} id={item} />
+            <ul className="sortable-list">
+              {players.map((item, index) => (
+                <SortableItem key={item} id={item} index={index} />
               ))}
             </ul>
           </SortableContext>
         </DndContext>
       </div>
-      <Button size="lg" onClick={handleBack}>Takaisin</Button>
+      <Button style={{margin: "0.1em"}} size="me" onClick={shufflePlayers}>Sekoita</Button>
+      <ButtonToolbar className='molkkyButtonToolBar'>      
+          <Button style={{margin: "0.1em"}} size="me" onClick={handleBack}>Takaisin</Button>
+          <Button style={{margin: "0.1em"}} size="me" onClick={handleMolkkyGame}>Aloita peli</Button>
+        </ButtonToolbar>
     </Container>
   );
 }

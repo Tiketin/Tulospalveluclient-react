@@ -32,7 +32,8 @@ const Molkky = () => {
   const [gameInstruction, setgameInstruction] = useState(
       'Vuorossa: ' + localStorage.getItem('player0'));
   const [disable, setDisable] = useState(true);
-  const scoresEndRef = useRef(null)
+  const scoresEndRef = useRef(null);
+  const h3 = useRef();
 
   useEffect(() => {
     scrollToBottom();
@@ -301,9 +302,11 @@ const Molkky = () => {
   useEffect(() => {
     if(localStorage.getItem("mode") === "dark"){
       document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
+      h3.current.style.color = "white";
     }
     else {
       document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
+      h3.current.style.color = "black";
     }
     showStartGrid();
     window.scroll(0, 0);
@@ -321,7 +324,7 @@ const Molkky = () => {
           <div ref={scoresEndRef}/>
         </Container>
         <Container className='molkkyButtonContainer'>
-          <h3>{gameInstruction}</h3>
+          <h3 ref={h3}>{gameInstruction}</h3>
           <Row className='molkkyButtonRow'>
             <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(7)}>7</Button></div>
             <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(9)}>9</Button></div>
