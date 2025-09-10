@@ -35,7 +35,7 @@ const NewGame = () => {
         <h1 ref={h1}>Valitse Peli</h1>
         <ButtonGroup Vertical className="buttonGroup">
           <Button size="lg" onClick={handleMolkky}>Mölkky</Button>
-          <Button size="lg">Ristiseiska</Button>
+          <Button size="lg">40K</Button>
           <Button size="lg" onClick={handleSettings}>Takaisin</Button>
         </ButtonGroup>
       </Container>

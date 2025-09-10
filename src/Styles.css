@@ -161,6 +161,22 @@ h1 {
         overflow: scroll;
         border-radius: 0.5em;
     }
+    /* UL list */
+    .sortable-list {
+        list-style: none;
+        padding: 0 100px;
+        margin: 0;
+        max-height: 400px !important;
+        overflow-y: auto;
+    }
+    
+    #playerTable {
+        background: #ffdead !important;
+        border: 4px solid rgba(0, 0, 0, 0.8) !important;
+        --bs-table-bg: none;
+        max-height: 250px !important;
+        overflow-y: auto;
+    }
 }
 
 .wrapper {
@@ -493,3 +509,49 @@ Form{
     align-items: center;
     box-shadow: none !important;
 }
+
+/* Container for draggable list */
+.draglist-container {
+  padding: 1.5rem;
+}
+
+/* UL list */
+.sortable-list {
+  list-style: none;
+  padding: 0 100px;
+  margin: 0;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Each draggable item */
+.sortable-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 12px;
+  background: #ffdead;
+  border: 4px solid rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  touch-action: none;
+}
+
+/* Index number on left */
+.sortable-index {
+  width: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 12px;
+}
+
+#playerTable {
+    background: #ffdead !important;
+    border: 4px solid rgba(0, 0, 0, 0.8) !important;
+    --bs-table-bg: none;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
