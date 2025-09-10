@@ -104,6 +104,25 @@ const Players = () => {
     navigate('/molkky');
   };
 
+  const handleMolkkyPlayerOrder = () => {
+    let playerAmount = 0;
+    let playersToAdd = [];
+    let rows = table.current.rows;
+    for (let i = 0; i<rows.length; i++){
+      localStorage.removeItem("player" + i);
+      if(rows[i].children[1].children[0].checked === true){
+        playersToAdd.push(rows[i].children[0].innerText)
+        playerAmount++;
+      }
+    }
+    for (let i in playersToAdd){
+
+      localStorage.setItem("player" + i, playersToAdd[i]);
+    }
+    localStorage.setItem("playerAmount", playerAmount.toString());
+    navigate('/molkkyplayerorder');
+  }
+
   const handleBack = () =>{
     navigate("/newgame")
   }
@@ -147,7 +166,7 @@ const Players = () => {
             {playerTable}
             </tbody>
           </Table>
-          <Button onClick={handleMolkkyGame} size="sm">Aloita peli</Button>
+          <Button onClick={handleMolkkyPlayerOrder} size="sm">Eteenpäin</Button>
         </Form>
 
         <Button size="lg" onClick={handleBack}>Takaisin</Button>

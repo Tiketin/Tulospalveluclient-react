@@ -151,6 +151,34 @@ h1 {
   }
 }
 
+@media screen and (max-height: 667px){
+    .grid-container {
+        display: grid !important;
+        align-items: stretch !important;
+        background-color: black;
+        padding: 0.2em !important;
+        max-height: 130px !important;
+        overflow: scroll;
+        border-radius: 0.5em;
+    }
+    /* UL list */
+    .sortable-list {
+        list-style: none;
+        padding: 0 100px;
+        margin: 0;
+        max-height: 400px !important;
+        overflow-y: auto;
+    }
+    
+    #playerTable {
+        background: #ffdead !important;
+        border: 4px solid rgba(0, 0, 0, 0.8) !important;
+        --bs-table-bg: none;
+        max-height: 250px !important;
+        overflow-y: auto;
+    }
+}
+
 .wrapper {
     text-align: center;
     margin-top: 1em;
@@ -235,7 +263,7 @@ ul {
     align-items: stretch !important;
     background-color: black;
     padding: 0.2em !important;
-    max-height: 250px;
+    max-height: 15em;
     overflow: scroll;
     border-radius: 0.5em;
 }
@@ -307,7 +335,7 @@ Button{
     justify-content: center;
     align-items: center;
     box-shadow: none !important;
-    margin: 0.5em !important;
+    margin: 0.5em;
 }
 
 Form{
@@ -416,6 +444,114 @@ Form{
     align-items: center;
 }
 
+.molkkyButtonContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    bottom: 120px;
+}
 
+.molkkyButtonToolBar {
+    margin-top: auto;
+    padding: 0.5rem;
+    position: absolute;
+    bottom: 50px;
+}
 
+.col {
+    padding: 3px !important;
+}
+
+.nameRow {
+    margin-top: 5px;
+    display: grid !important;
+    align-items: stretch !important;
+    background-color: black;
+    padding: 0.2em !important;
+    max-height: 160px;
+    overflow: scroll;
+    border-radius: 0.5em;
+}
+
+.molkkyButton {
+    margin: 0;
+    padding: 0 !important;
+    height: 56px;
+    width: 56px;
+    background-image: url('molkkybutton.png');
+    background-repeat: no-repeat;
+    border: none !important;
+    font-family: "Courier New" !important;
+    font-weight: bold !important;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    min-height: none;
+    align-items: center;
+    box-shadow: none !important;
+}
+
+.molkkyButtonWide {
+    margin: 0;
+    padding: 0 !important;
+    height: 56px;
+    width: 128px;
+    background-image: url('molkkybuttonwide.png');
+    background-repeat: no-repeat;
+    border: none !important;
+    font-family: "Courier New" !important;
+    font-weight: bold !important;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    min-height: none;
+    align-items: center;
+    box-shadow: none !important;
+}
+
+/* Container for draggable list */
+.draglist-container {
+  padding: 1.5rem;
+}
+
+/* UL list */
+.sortable-list {
+  list-style: none;
+  padding: 0 100px;
+  margin: 0;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Each draggable item */
+.sortable-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 12px;
+  background: #ffdead;
+  border: 4px solid rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: grab;
+  touch-action: none;
+}
+
+/* Index number on left */
+.sortable-index {
+  width: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 12px;
+}
+
+#playerTable {
+    background: #ffdead !important;
+    border: 4px solid rgba(0, 0, 0, 0.8) !important;
+    --bs-table-bg: none;
+    max-height: 350px;
+    overflow-y: auto;
+}
 
