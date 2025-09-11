@@ -8,6 +8,7 @@ import {
 } from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
+import MolkkyPlayerScore from '../utils/MolkkyPlayerScore';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -23,6 +24,7 @@ let playerScoreList
 let winner;
 let someoneHasWon;
 let shortenNames;
+let molkkyPlayerScores;
 
 const Molkky = () => {
 
@@ -60,12 +62,13 @@ const Molkky = () => {
     rows = [1];
     playerScoreList = [];
     someoneHasWon = false;
+    molkkyPlayerScores = [];
 
 
     for (let i = 0; i < playerAmount; i++) {
       player = localStorage.getItem('player' + i);
-
       if (player !== null) {
+        molkkyPlayerScores.push(new MolkkyPlayerScore(player));
         let playerScores = {
             p0: 0,
             p1: 0,
@@ -105,6 +108,7 @@ const Molkky = () => {
     } else {
       strikes[playerToUpdate] = 0;
     }
+    molkkyPlayerScores[currentPlayer].addScore(parseInt(result));
     scores[playerToUpdate] += parseInt(result);
     const point = `p${parseInt(result)}`;
     playerScoreList[playerToUpdate][point]++;
@@ -133,7 +137,8 @@ const Molkky = () => {
         playerLost[playerToUpdate] = false;
       }
     }
-    scores[playerToUpdate] -= parseInt(result);
+    molkkyPlayerScores[currentPlayer].removeScore();
+    scores[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnScore();
     const point = `p${parseInt(result)}`;
     playerScoreList[playerToUpdate][point]--;
 
