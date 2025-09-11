@@ -41,6 +41,7 @@ const Molkky = () => {
 
   const scrollToBottom = () => {
     scoresEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   };
 
   const showStartGrid = () => {
@@ -308,6 +309,7 @@ const Molkky = () => {
       h3.current.style.color = "black";
     }
     showStartGrid();
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
   return (
