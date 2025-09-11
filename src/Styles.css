@@ -181,11 +181,17 @@ h1 {
 /* Fixing a bunch of stupid old iPhones */
 @supports (-webkit-overflow-scrolling: touch) {
     .molkkyButtonContainer {
-        bottom: 154px !important;
+        bottom: 160px !important;
     }
 
     .molkkyButtonToolBar {
-        bottom: 84px !important;
+        bottom: 90px !important;
+    }
+    .grid-container {
+        max-height: 11em !important;
+    }
+    #playerTable {
+        max-height: 280px !important;
     }
 }
 
