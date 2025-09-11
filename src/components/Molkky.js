@@ -41,7 +41,6 @@ const Molkky = () => {
 
   const scrollToBottom = () => {
     scoresEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    window.scroll(0, 0);
   };
 
   const showStartGrid = () => {
@@ -309,7 +308,6 @@ const Molkky = () => {
       h3.current.style.color = "black";
     }
     showStartGrid();
-    window.scroll(0, 0);
   }, []);
 
   return (
