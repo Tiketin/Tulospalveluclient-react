@@ -449,14 +449,14 @@ Form{
     flex-direction: column;
     align-items: center;
     position: absolute;
-    bottom: 120px;
+    bottom: calc(120px + env(safe-area-inset-bottom));
 }
 
 .molkkyButtonToolBar {
     margin-top: auto;
     padding: 0.5rem;
     position: absolute;
-    bottom: 50px;
+    bottom: calc(50px + env(safe-area-inset-bottom));
 }
 
 .col {
