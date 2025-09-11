@@ -178,6 +178,22 @@ h1 {
         overflow-y: auto;
     }
 }
+/* Fixing a bunch of stupid old iPhones */
+@supports (-webkit-overflow-scrolling: touch) {
+    .molkkyButtonContainer {
+        bottom: 160px !important;
+    }
+
+    .molkkyButtonToolBar {
+        bottom: 90px !important;
+    }
+    .grid-container {
+        max-height: 11em !important;
+    }
+    #playerTable {
+        max-height: 280px !important;
+    }
+}
 
 .wrapper {
     text-align: center;
