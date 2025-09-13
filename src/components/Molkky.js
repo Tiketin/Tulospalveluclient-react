@@ -105,12 +105,8 @@ const Molkky = () => {
   };
 
   const updateScore = (playerToUpdate, result) => {
-    if (parseInt(result) === 0) {
-      strikes[playerToUpdate]++;
-    } else {
-      strikes[playerToUpdate] = 0;
-    }
     molkkyPlayerScores[currentPlayer].addScore(parseInt(result));
+    strikes[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnStrikes();
     scores[playerToUpdate] += parseInt(result);
     const point = `p${parseInt(result)}`;
     playerScoreList[playerToUpdate][point]++;
@@ -133,13 +129,11 @@ const Molkky = () => {
   };
   
   const removeScore = (playerToUpdate, result) => {
-    if (parseInt(result) === 0) {
-      strikes[playerToUpdate]--;
-      if (playerLost[playerToUpdate] === true) {
+    if (parseInt(result) === 0 && playerLost[playerToUpdate] === true) {
         playerLost[playerToUpdate] = false;
-      }
     }
     molkkyPlayerScores[currentPlayer].removeScore();
+    strikes[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnStrikes();
     scores[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnScore();
     const point = `p${parseInt(result)}`;
     playerScoreList[playerToUpdate][point]--;
