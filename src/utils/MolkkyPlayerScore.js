@@ -24,6 +24,18 @@ class MolkkyPlayerScore {
         this.scores.pop();
     }
 
+    returnStrikes(){
+        this.strikes = 0;
+        this.scores.forEach((score) => {
+            if(score === 0) {
+                this.strikes++;
+            } else {
+                this.strikes = 0;
+            }
+        });
+        return this.strikes;
+    }
+
     returnScore(){
         let totalScore = 0;
         this.scores.forEach((score) => {

@@ -34,6 +34,7 @@ const Molkky = () => {
   const [gameInstruction, setgameInstruction] = useState(
       'Vuorossa: ' + localStorage.getItem('player0'));
   const [disable, setDisable] = useState(true);
+  const [gameEnded, setGameEnded] = useState(true);
   const scoresEndRef = useRef(null);
   const h3 = useRef();
 
@@ -63,6 +64,7 @@ const Molkky = () => {
     playerScoreList = [];
     someoneHasWon = false;
     molkkyPlayerScores = [];
+    setGameEnded(false);
 
 
     for (let i = 0; i < playerAmount; i++) {
@@ -103,12 +105,8 @@ const Molkky = () => {
   };
 
   const updateScore = (playerToUpdate, result) => {
-    if (parseInt(result) === 0) {
-      strikes[playerToUpdate]++;
-    } else {
-      strikes[playerToUpdate] = 0;
-    }
     molkkyPlayerScores[currentPlayer].addScore(parseInt(result));
+    strikes[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnStrikes();
     scores[playerToUpdate] += parseInt(result);
     const point = `p${parseInt(result)}`;
     playerScoreList[playerToUpdate][point]++;
@@ -131,13 +129,11 @@ const Molkky = () => {
   };
   
   const removeScore = (playerToUpdate, result) => {
-    if (parseInt(result) === 0) {
-      strikes[playerToUpdate]--;
-      if (playerLost[playerToUpdate] === true) {
+    if (parseInt(result) === 0 && playerLost[playerToUpdate] === true) {
         playerLost[playerToUpdate] = false;
-      }
     }
     molkkyPlayerScores[currentPlayer].removeScore();
+    strikes[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnStrikes();
     scores[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnScore();
     const point = `p${parseInt(result)}`;
     playerScoreList[playerToUpdate][point]--;
@@ -174,10 +170,18 @@ const Molkky = () => {
       roundCounter++;
       rows.push(roundCounter);
     }
-    
-
-    while(playerLost[currentPlayer] === true) {
-      allScores.push('X');
+    let playersChecked = 0;
+    while(playerLost[currentPlayer] === true || molkkyPlayerScores[currentPlayer].returnScore() === 50) {
+      if(playersChecked === players.length) {
+        alert("Peli on päättynyt!");
+        setGameEnded(true);
+        break;
+      }
+      if(playerLost[currentPlayer] === true) {
+        allScores.push('X');
+      } else {
+        allScores.push('V');
+      } 
       setScoreGrid(rows.map((row) =>
               <Row>
                 {scores.map((score, i) =>
@@ -191,8 +195,9 @@ const Molkky = () => {
         roundCounter++;
         rows.push(roundCounter);
       }
+      playersChecked++;
     }
-    setgameInstruction('Vuorossa: ' + players[currentPlayer]);
+    setGameInstruction();
   };
 
   const backToPreviousScore = () => {
@@ -201,7 +206,7 @@ const Molkky = () => {
 
     // Get the last score before removing it
     let lastScore = allScores[allScores.length - 1];
-    if(lastScore === 'X') {
+    if(lastScore === 'X' || lastScore === 'V') {
       allScores.pop();
       currentPlayer--;
       if(currentPlayer < 0) {
@@ -245,7 +250,7 @@ const Molkky = () => {
       ))
     );
 
-    setgameInstruction("Vuorossa: " + players[currentPlayer]);
+    setGameInstruction();
   };
 
   const winnerFound = () => {
@@ -300,6 +305,15 @@ const Molkky = () => {
 
   }
 
+  const setGameInstruction = () => {
+    let neededScore = 50 - molkkyPlayerScores[currentPlayer].returnScore();
+    if (neededScore <= 12) {
+      setgameInstruction("Vuorossa: " + players[currentPlayer] + " (" + neededScore + ")");
+    } else {
+      setgameInstruction("Vuorossa: " + players[currentPlayer]);
+    }
+  }
+
   const endGame = () => {
     if(window.confirm("Haluatko lopettaa pelin?")) navigate("/menu");
   }
@@ -331,28 +345,28 @@ const Molkky = () => {
         <Container className='molkkyButtonContainer'>
           <h3 ref={h3}>{gameInstruction}</h3>
           <Row className='molkkyButtonRow'>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(7)}>7</Button></div>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(9)}>9</Button></div>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(8)}>8</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(7)} disabled={gameEnded}>7</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(9)} disabled={gameEnded}>9</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(8)} disabled={gameEnded}>8</Button></div>
           </Row>
           <Row className='molkkyButtonRow'>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(5)}>5</Button></div>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(11)}>11</Button></div>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(12)}>12</Button></div>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(6)}>6</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(5)} disabled={gameEnded}>5</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(11)} disabled={gameEnded}>11</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(12)} disabled={gameEnded}>12</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(6)} disabled={gameEnded}>6</Button></div>
           </Row>
           <Row className='molkkyButtonRow'>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(3)}>3</Button></div>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(10)}>10</Button></div>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(4)}>4</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(3)} disabled={gameEnded}>3</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(10)} disabled={gameEnded}>10</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(4)} disabled={gameEnded}>4</Button></div>
           </Row>
           <Row className='molkkyButtonRow'>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(1)}>1</Button></div>
-            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(2)}>2</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(1)} disabled={gameEnded}>1</Button></div>
+            <div className="col"><Button className='molkkyButton' onClick={() => addNewScore(2)} disabled={gameEnded}>2</Button></div>
           </Row>
           <Row className='molkkyButtonRow'>
-            <div className="col"><Button className='molkkyButtonWide' onClick={() => backToPreviousScore()}>Peruuta</Button></div>
-            <div className="col"><Button className='molkkyButtonWide' onClick={() => addNewScore(0)}>- Ohi -</Button></div>
+            <div className="col"><Button className='molkkyButtonWide' onClick={() => backToPreviousScore()} disabled={gameEnded}>Peruuta</Button></div>
+            <div className="col"><Button className='molkkyButtonWide' onClick={() => addNewScore(0)} disabled={gameEnded}>- Ohi -</Button></div>
           </Row> 
         </Container>
         <ButtonToolbar className='molkkyButtonToolBar'>
