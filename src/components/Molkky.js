@@ -107,7 +107,6 @@ const Molkky = () => {
   const updateScore = (playerToUpdate, result) => {
     molkkyPlayerScores[currentPlayer].addScore(parseInt(result));
     strikes[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnStrikes();
-    console.log("Update strikes " + strikes[playerToUpdate]);
     scores[playerToUpdate] += parseInt(result);
     const point = `p${parseInt(result)}`;
     playerScoreList[playerToUpdate][point]++;
@@ -135,7 +134,6 @@ const Molkky = () => {
     }
     molkkyPlayerScores[currentPlayer].removeScore();
     strikes[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnStrikes();
-    console.log("Remove strikes " + strikes[playerToUpdate]);
     scores[playerToUpdate] = molkkyPlayerScores[currentPlayer].returnScore();
     const point = `p${parseInt(result)}`;
     playerScoreList[playerToUpdate][point]--;
