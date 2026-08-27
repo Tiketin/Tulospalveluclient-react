@@ -1,4 +1,4 @@
-import {Col, Container, Form, FormText, Row, Table} from 'react-bootstrap';
+import {Col, Container, Form, Row, Table} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import '../Styles.css';
 import React, {useEffect, useRef, useState} from 'react';
@@ -22,7 +22,6 @@ const Players = () => {
 
 
   const handlePlayerChange = (event) => {
-    console.log(event.target.value);
     setNewPlayer(event.target.value);
   };
 

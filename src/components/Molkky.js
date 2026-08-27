@@ -7,6 +7,10 @@ import { API_URL } from '../config';
 
 const STORAGE_KEY = 'molkky_active_game_state';
 
+export const clearGameState = () => {
+  localStorage.removeItem(STORAGE_KEY);
+};
+
 const Molkky = () => {
   const navigate = useNavigate();
   const [nameGrid, setNameGrid] = useState(null);
@@ -57,10 +61,6 @@ const Molkky = () => {
     } catch (e) {
       console.error('Failed to save game state to local storage:', e);
     }
-  };
-
-  const clearGameState = () => {
-    localStorage.removeItem(STORAGE_KEY);
   };
 
   const updateGameInstruction = () => {

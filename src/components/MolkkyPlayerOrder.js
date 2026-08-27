@@ -16,9 +16,14 @@ import {
 } from "@dnd-kit/sortable";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Container, ButtonToolbar, Button, Table } from "react-bootstrap";
+import { Container, ButtonToolbar, Button } from "react-bootstrap";
 import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
+import { clearGameState } from "./Molkky";
+
+const STORAGE_KEY = 'molkky_active_game_state';
+
+
 
 // Sortable item (only name is draggable, index is fixed)
 function SortableItem({ id, index }) {
@@ -53,6 +58,7 @@ export default function DragList() {
     const h2 = useRef();
     const navigate = useNavigate();
     const [players, setPlayers] = useState([]);
+    const [disable, setDisable] = useState(true);
 
     // Load players from localStorage once when component mounts
     useEffect(() => {
@@ -63,6 +69,10 @@ export default function DragList() {
             if (player) loadedPlayers.push(player);
         }
         setPlayers(loadedPlayers);
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if(savedData) {
+          setDisable(false);
+        }
     }, []);
 
     // Save players back to localStorage whenever order changes
@@ -115,7 +125,12 @@ export default function DragList() {
       }
     }, []);
 
-  const handleMolkkyGame = () => {
+  const handleContinueMolkkyGame = () => {
+    navigate('/molkky');
+  };
+
+  const handleNewMolkkyGame = () => {
+    clearGameState();
     navigate('/molkky');
   };
 
@@ -141,11 +156,14 @@ export default function DragList() {
           </SortableContext>
         </DndContext>
       </div>
-      <Button style={{margin: "0.1em"}} size="me" onClick={shufflePlayers}>Sekoita</Button>
+      <ButtonToolbar className='molkkyButtonToolBar'>
+        <Button style={{margin: "3.2rem 0.1rem"}} size="me" onClick={shufflePlayers}>Sekoita</Button>
+        <Button style={{margin: "3.2rem 0.1rem"}} size="me" onClick={handleContinueMolkkyGame} disabled={disable}>Jatka peliä</Button>
+      </ButtonToolbar>
       <ButtonToolbar className='molkkyButtonToolBar'>      
-          <Button style={{margin: "0.1em"}} size="me" onClick={handleBack}>Takaisin</Button>
-          <Button style={{margin: "0.1em"}} size="me" onClick={handleMolkkyGame}>Aloita peli</Button>
-        </ButtonToolbar>
+          <Button style={{margin: "0.1rem"}} size="me" onClick={handleBack}>Takaisin</Button>
+          <Button style={{margin: "0.1rem"}} size="me" onClick={handleNewMolkkyGame}>Uusi peli</Button>
+      </ButtonToolbar>
     </Container>
   );
 }
