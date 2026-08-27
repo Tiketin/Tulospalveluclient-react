@@ -5,8 +5,6 @@ import {useNavigate} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import { API_URL } from '../config';
 
-const apiUrl = API_URL;
-
 const Statistics = () => {
   const navigate = useNavigate();
   const handleMenu = () => {
@@ -57,7 +55,7 @@ const Statistics = () => {
       }
     };
     xmlhttp.open('GET',
-        apiUrl + '/api/players?group=' +
+        API_URL + '/api/players?group=' +
         localStorage.getItem('group'), true);
     xmlhttp.send();
   };
@@ -151,7 +149,7 @@ const Statistics = () => {
         }
       };
       xmlhttp.open("GET",
-          apiUrl + "/api/player?group=" +
+          API_URL + "/api/player?group=" +
           localStorage.getItem("group") + "&player=" + json.rows[i].nimi, true);
       xmlhttp.send();
     }

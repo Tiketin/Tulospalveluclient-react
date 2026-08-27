@@ -8,8 +8,6 @@ import { API_URL } from '../config';
  * @author Onni Lukkarila
  */
 
-const apiUrl = API_URL;
-
 const Players = () => {
   const h1 = useRef();
   const [newPlayer, setNewPlayer] = useState();
@@ -58,7 +56,7 @@ const Players = () => {
 
     };
     xmlhttp.open('GET',
-        apiUrl + '/api/players?group=' +
+        API_URL + '/api/players?group=' +
         localStorage.getItem('group'), true);
     xmlhttp.send();
   };
@@ -76,7 +74,7 @@ const Players = () => {
       console.log(body);
       let xmlhttp = new XMLHttpRequest();
       xmlhttp.open('POST',
-          apiUrl + '/api/newplayer', true);
+          API_URL + '/api/newplayer', true);
       xmlhttp.setRequestHeader('Content-Type', 'application/json');
       xmlhttp.send(JSON.stringify(body));
       setTimeout(function() {

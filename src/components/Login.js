@@ -4,7 +4,7 @@ import {Button} from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
 import { useEffect } from 'react';
-const apiUrl = process.env.REACT_APP_API_URL;
+import { API_URL } from '../config';
 
 const Login = () => {
 
@@ -62,8 +62,8 @@ const Login = () => {
         }
       }
     };
-    console.log(apiUrl + '/api/login?group=' + newEmail + '&password=' + newPassword);
-    xmlhttp.open('GET', apiUrl + '/api/login?group=' + newEmail + '&password=' + newPassword, true);
+    console.log(API_URL + '/api/login?group=' + newEmail + '&password=' + newPassword);
+    xmlhttp.open('GET', API_URL + '/api/login?group=' + newEmail + '&password=' + newPassword, true);
     xmlhttp.send();
     setValidated(true);
   };
