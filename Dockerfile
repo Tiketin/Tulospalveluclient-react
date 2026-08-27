@@ -17,8 +17,8 @@ FROM nginx:alpine
 # Copy built static assets from Stage 1 to Nginx default folder
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose port 3001 for web traffic
-EXPOSE 3001
+# Expose port 80 for web traffic
+EXPOSE 80
 
-# Start Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+# Create env-config.js at container startup, then start Nginx
+CMD ["/bin/sh", "-c", "echo \"window._env_ = { REACT_APP_API_URL: '${REACT_APP_API_URL}' };\" > /usr/share/nginx/html/env-config.js && exec nginx -g 'daemon off;'"]

@@ -3,8 +3,9 @@ import '../Styles.css';
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
+import { API_URL } from '../config';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = API_URL;
 
 const Statistics = () => {
   const navigate = useNavigate();
