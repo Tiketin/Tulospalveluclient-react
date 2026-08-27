@@ -22,7 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/package-lock.json
-
 #This is in use on servers! Only use own parameters locally!
 .env
