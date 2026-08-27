@@ -11,8 +11,6 @@ import '../Styles.css';
 import MolkkyPlayerScore from '../utils/MolkkyPlayerScore';
 import { API_URL } from '../config';
 
-const apiUrl = API_URL;
-
 let scores;
 let strikes;
 let playerLost;
@@ -297,7 +295,7 @@ const Molkky = () => {
 
       let xmlhttp = new XMLHttpRequest();
       xmlhttp.open("POST",
-          apiUrl + "/api/newgame", true);
+          API_URL + "/api/newgame", true);
       xmlhttp.setRequestHeader("Content-Type", "application/json");
       xmlhttp.send(JSON.stringify(body));
       alert("Peli tallennettu!");

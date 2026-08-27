@@ -6,8 +6,6 @@ import '../Styles.css';
 import { useEffect } from 'react';
 import { API_URL } from '../config';
 
-const apiUrl = API_URL;
-
 const Register = () => {
 
   /**
@@ -56,7 +54,7 @@ const Register = () => {
         }
       }
     };
-    xmlhttp.open('GET', apiUrl + '/api/login?group=' + newEmail + '&password=' + newPassword, true);
+    xmlhttp.open('GET', API_URL + '/api/login?group=' + newEmail + '&password=' + newPassword, true);
     xmlhttp.send();
     setValidated(true);
   };
@@ -83,7 +81,7 @@ const Register = () => {
         console.log(body)
         let xmlhttp = new XMLHttpRequest();
         xmlhttp.open('POST',
-            apiUrl + '/api/newgroup', true);
+            API_URL + '/api/newgroup', true);
         xmlhttp.setRequestHeader('Content-Type', 'application/json');
         xmlhttp.send(JSON.stringify(body));
         localStorage.setItem('group', newEmail);
