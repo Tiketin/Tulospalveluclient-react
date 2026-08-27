@@ -9,8 +9,9 @@ import {
 import {useNavigate} from 'react-router-dom';
 import '../Styles.css';
 import MolkkyPlayerScore from '../utils/MolkkyPlayerScore';
+import { API_URL } from '../config';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = API_URL;
 
 let scores;
 let strikes;

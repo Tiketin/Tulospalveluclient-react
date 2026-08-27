@@ -3,12 +3,12 @@ import {Button} from 'react-bootstrap';
 import '../Styles.css';
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-
+import { API_URL } from '../config';
 /**
  * @author Onni Lukkarila
  */
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = API_URL;
 
 const Players = () => {
   const h1 = useRef();
