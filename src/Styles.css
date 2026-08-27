@@ -88,6 +88,18 @@ h1 {
     transform: scale(2.5);
 }
 
+.scoreRow {
+    margin: 0 !important; 
+}
+
+.round-header {
+    max-width: 2rem !important;
+}
+
+.round-cell {
+    max-width: 2rem !important;
+}
+
 @media screen and (max-width: 430px) {
     #stats{
         font-size:2em;
@@ -152,15 +164,7 @@ h1 {
 }
 
 @media screen and (max-height: 667px){
-    .grid-container {
-        display: grid !important;
-        align-items: stretch !important;
-        background-color: black;
-        padding: 0.2em !important;
-        max-height: 130px !important;
-        overflow: scroll;
-        border-radius: 0.5em;
-    }
+    
     /* UL list */
     .sortable-list {
         list-style: none;
@@ -279,9 +283,9 @@ ul {
     align-items: stretch !important;
     background-color: black;
     padding: 0.2em !important;
-    max-height: 15em;
+    max-height: 13rem;
     overflow: scroll;
-    border-radius: 0.5em;
+    border-radius: 0 0 0.5em 0.5em;
 }
 
 .grid-item {
@@ -421,6 +425,10 @@ Form{
     margin: 0 !important;
 }
 
+.molkkyButtonRowLast {
+    margin-bottom: 1rem !important;
+}
+
 .backToMenu{
     display: flex;
     align-content: center;
@@ -475,19 +483,15 @@ Form{
     bottom: 50px;
 }
 
-.col {
-    padding: 3px !important;
-}
-
 .nameRow {
-    margin-top: 5px;
-    display: grid !important;
+    margin-top: 0.1rem;
+    display: grid;
     align-items: stretch !important;
     background-color: black;
-    padding: 0.2em !important;
-    max-height: 160px;
+    padding: 0.2rem !important;
+    max-height: 4rem;
     overflow: scroll;
-    border-radius: 0.5em;
+    border-radius: 0.5em 0.5em 0 0;
 }
 
 .molkkyButton {
