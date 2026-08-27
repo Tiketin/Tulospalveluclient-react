@@ -15,7 +15,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy built static assets from Stage 1 to Nginx default folder
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose port 3001 for web traffic
 EXPOSE 3001
