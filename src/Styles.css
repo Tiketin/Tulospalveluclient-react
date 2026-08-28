@@ -297,9 +297,9 @@ ul {
     grid-template-columns: min-content 100px;
     border-radius: 0.5em;
     margin: 0 !important;
-    white-space: nowrap;  /* Estää tekstin rivittymisen usealle riville */
-    overflow-x: auto;     /* Lisää vaakasuuntaisen vierityspalkin vain tarvittaessa */
-    overflow-y: hidden;   /* Piilottaa pystysuuntaisen vierityksen */
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
     width: 100%;
 }
 
