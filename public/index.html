@@ -9,6 +9,35 @@
       name="Tulospalvelu"
       content="Tulospalvelu"
     />
+    <!-- Automatic Cache-Buster & Fail-Safe -->
+    <script>
+      // 1. Unregister any latent Service Worker from old app versions
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (let r of registrations) { r.unregister(); }
+        });
+      }
+
+      // 2. Global listener for missing bundle 404 errors
+      window.addEventListener('error', function(event) {
+        var target = event.target || event.srcElement;
+        var isStaticAsset = target && (target.tagName === 'SCRIPT' || target.tagName === 'LINK');
+        
+        if (isStaticAsset) {
+          var storageKey = 'app_cache_reload_attempt';
+          var lastReload = sessionStorage.getItem(storageKey);
+          var now = Date.now();
+
+          // Prevent infinite reload loops (max once per session / 10 sec)
+          if (!lastReload || (now - parseInt(lastReload, 10)) > 10000) {
+            sessionStorage.setItem(storageKey, now.toString());
+            // Appends a cache-busting timestamp parameter to force Nginx to serve new index.html
+            var cleanUrl = window.location.href.split('?')[0];
+            window.location.replace(cleanUrl + '?v=' + now);
+          }
+        }
+      }, true);
+    </script>
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
