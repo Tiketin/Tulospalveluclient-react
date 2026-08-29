@@ -131,6 +131,8 @@ export default function DragList() {
 
   const handleNewMolkkyGame = () => {
     clearGameState();
+    localStorage.setItem("teamGame", false);
+    localStorage.removeItem("molkky_teams");
     navigate('/molkky');
   };
 

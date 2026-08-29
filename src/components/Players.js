@@ -16,6 +16,7 @@ const Players = () => {
   const navigate = useNavigate();
   const table = useRef();
   const hasFetched = useRef(false);
+  let isChecked = false;
   let json;
   let players = [];
   let player;
@@ -82,26 +83,15 @@ const Players = () => {
     }
   };
 
-  const handleMolkkyGame = () => {
-    let playerAmount = 0;
-    let playersToAdd = [];
-    let rows = table.current.rows;
-    for (let i = 0; i<rows.length; i++){
-      localStorage.removeItem("player" + i);
-      if(rows[i].children[1].children[0].checked === true){
-        playersToAdd.push(rows[i].children[0].innerText)
-        playerAmount++;
-      }
-    }
-    for (let i in playersToAdd){
-
-      localStorage.setItem("player" + i, playersToAdd[i]);
-    }
-    localStorage.setItem("playerAmount", playerAmount.toString());
-    navigate('/molkky');
-  };
+  const handleTeamSelection = () => {
+    navigate('/teamselection');
+  }
 
   const handleMolkkyPlayerOrder = () => {
+    navigate('/molkkyplayerorder');
+  }
+
+  const initializePlayers = () => {
     let playerAmount = 0;
     let playersToAdd = [];
     let rows = table.current.rows;
@@ -117,12 +107,21 @@ const Players = () => {
       localStorage.setItem("player" + i, playersToAdd[i]);
     }
     localStorage.setItem("playerAmount", playerAmount.toString());
-    navigate('/molkkyplayerorder');
+    if (isChecked) {
+      handleTeamSelection();
+    }
+    else {
+      handleMolkkyPlayerOrder();
+    }
   }
 
   const handleBack = () =>{
     navigate("/newgame")
   }
+
+  const isTeamCheckboxChecked = (e) => {
+    isChecked = e.target.checked;
+  };
 
   useEffect(() => {
     if(localStorage.getItem("mode") === "dark"){
@@ -163,7 +162,11 @@ const Players = () => {
             {playerTable}
             </tbody>
           </Table>
-          <Button onClick={handleMolkkyPlayerOrder} size="sm">Eteenpäin</Button>
+          <div>
+            Joukkueet
+            <input id='teamcheckbox' className="form-check-input" type="checkbox" defaultChecked={false} onChange={isTeamCheckboxChecked}/>
+          </div>
+          <Button onClick={initializePlayers} size="sm">Eteenpäin</Button>
         </Form>
 
         <Button size="lg" onClick={handleBack}>Takaisin</Button>

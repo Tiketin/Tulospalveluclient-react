@@ -88,6 +88,24 @@ h1 {
     transform: scale(2.5);
 }
 
+.teamAmountButton {
+    margin: 0;
+    padding: 0 !important;
+    height: 56px;
+    width: 56px;
+    background-image: url('molkkybutton.png');
+    background-repeat: no-repeat;
+    border: none !important;
+    font-family: "Courier New" !important;
+    font-weight: bold !important;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    min-height: none;
+    align-items: center;
+    box-shadow: none !important;
+}
+
 .scoreRow {
     margin: 0 !important; 
 }
@@ -327,10 +345,20 @@ h3 {
     text-align: center;
 }
 
+#teamcheckbox {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+
 .form-control {
     min-height: 2.5em;
     max-width: 7rem !important;
     border-radius: 2px;
+}
+
+.teamContainerDiv {
+    overflow-y: auto;
+    max-height: 23rem !important;
 }
 
 
