@@ -10,6 +10,7 @@ import Statistics from './components/Statistics';
 import Players from './components/Players';
 import Molkky from './components/Molkky';
 import MolkkyPlayerOrder from './components/MolkkyPlayerOrder';
+import TeamSelection from './components/TeamSelection'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation } from 'react-router-dom';
 
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/statistics" element={<Statistics />} />
         <Route path="/players" element={<Players />} />
         <Route path="/molkkyplayerorder" element={<MolkkyPlayerOrder />} />
+        <Route path="/teamselection" element={<TeamSelection />} />
         <Route path="/molkky" element={<Molkky />} />
         <Route path="/register" element={<Register />} />
       </Routes>

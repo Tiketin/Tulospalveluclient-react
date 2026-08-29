@@ -13,10 +13,7 @@ Ajo:
 -npm start
 
 # Deploymentit ja tuotanto:
-Tulospalvelu pyörii Ubuntu-palvelimilla osoitteissa https://tulospalvelu.tikkalandia.fi/ (tuotanto) ja https://dev-tulospalvelu.tikkalandia.fi/ (kehitys).
-Palvelimilla on GitHubin Webhookien kuuntelija, joka asentaa uuden version oikealle koneelle automaattisesti, jos haaroihin master (tuotanto) tai development (kehitys) viedään muutoksia.
-Deployment-projekti: https://github.com/Tiketin/TulospalveluDeployment
-
-Palvelimilla Tulospalveluclientista tehdään npm run buildilla staattinen sivusto, joka palvellaan Nginx:llä Cloudflare-tunnelin kautta domainiin.
-
-Oikeaoppisesti muutokset ensin development-haaraan ja testaus kehitysympäristössä, ennen kuin viedään masteriin ja tuotantokoneelle. Master- ja development-haarat on suojattu, muutokset PR:n kautta.
+Tulospalvelu pyörii Docker-konteissa osoitteissa https://tulospalvelu.tikkalandia.fi/ (tuotanto) ja https://dev-tulospalvelu.tikkalandia.fi/ (kehitys).
+Dockerilla Tulospalveluclientista tehdään npm run buildilla staattinen sivusto, joka palvellaan Nginx:llä Cloudflare-tunnelin kautta domainiin.
+GitHub Actions luo master-haarasta Docker imagen ja puskee sen Dockerhubiin, josta niitä haetaan palvelimille Portainerilla.
+Muutokset siirtyvät master-haarasta automaattisesti dev-ympäristöön. Tuotantoympäristön asennukset tapahtuvat manuaalisesti Portainerin käyttöliittymältä.

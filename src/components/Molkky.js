@@ -3,6 +3,7 @@ import { Button, ButtonToolbar, Col, Container, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../Styles.css';
 import MolkkyPlayerScore from '../utils/MolkkyPlayerScore';
+import Team from '../utils/Team';
 import { API_URL } from '../config';
 
 const STORAGE_KEY = 'molkky_active_game_state';
@@ -35,7 +36,10 @@ const Molkky = () => {
     winner: null,
     someoneHasWon: false,
     shortenNames: false,
-    molkkyPlayerScores: []
+    molkkyPlayerScores: [],
+    isTeamGame: false,
+    teams: [],
+    individualMemberStats: {}
   });
 
   useEffect(() => {
@@ -45,6 +49,26 @@ const Molkky = () => {
   const scrollToBottom = () => {
     scoresEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  const formatTeamDisplayName = (team) => {
+    if (!team || !team.members || !team.members.length) return team ? team.name : '';
+    return team.members
+      .map((member) => member.trim().substring(0, 2))
+      .filter((prefix) => prefix.length > 0)
+      .join(' & ');
+  };
+
+  const getTeamsFromStorage = () => {
+    const savedTeamsJson = localStorage.getItem("molkky_teams");
+    if (!savedTeamsJson) return [];
+    try {
+      const rawTeams = JSON.parse(savedTeamsJson);
+      return rawTeams.map((rawTeam) => new Team(rawTeam));
+    } catch (error) {
+      console.error("Failed to parse teams from localStorage:", error);
+      return [];
+    }
   };
 
   const saveGameState = () => {
@@ -64,39 +88,56 @@ const Molkky = () => {
   };
 
   const updateGameInstruction = () => {
-    const { players, currentPlayer, molkkyPlayerScores } = stateRef.current;
-    if (!players.length || !molkkyPlayerScores[currentPlayer]) return;
+    const { players, currentPlayer, molkkyPlayerScores, isTeamGame, teams } = stateRef.current;
+    if (!players || !players.length || !molkkyPlayerScores[currentPlayer]) return;
 
     const currentScore = molkkyPlayerScores[currentPlayer].returnScore();
     const neededScore = 50 - currentScore;
 
+    const teamOrPlayerName = players[currentPlayer];
+    const currentMemberText = isTeamGame && teams[currentPlayer]
+      ? ` (${teams[currentPlayer].returnCurrentPlayer()})`
+      : '';
+
     if (neededScore <= 12) {
-      setGameInstructionText(`Vuorossa: ${players[currentPlayer]} (${neededScore})`);
+      setGameInstructionText(`Vuorossa: ${teamOrPlayerName}${currentMemberText} (${neededScore})`);
     } else {
-      setGameInstructionText(`Vuorossa: ${players[currentPlayer]}`);
+      setGameInstructionText(`Vuorossa: ${teamOrPlayerName}${currentMemberText}`);
+    }
+  };
+
+  const handleInstructionClick = () => {
+    const state = stateRef.current;
+    if (state.isTeamGame && state.teams[state.currentPlayer]) {
+      state.teams[state.currentPlayer].nextPlayer();
+      renderGrids();
+      updateGameInstruction();
+      saveGameState();
     }
   };
 
   const renderGrids = () => {
     const { players, scores, rows, allScores, shortenNames } = stateRef.current;
 
-    // Header Row (Round column indicator "#" + Player Names)
     setNameGrid(
       <>
         <Col className="grid-item round-header" key="round-header" xs={2} sm={1}>
           #
         </Col>
-        {scores.map((score, i) => (
-          <Col className="grid-item" key={`name-${i}`}>
-            {shortenNames ? players[i].substring(0, 3) : players[i]}
-            <br />
-            {scores[i]}
-          </Col>
-        ))}
+        {scores.map((score, i) => {
+          const displayName = shortenNames ? players[i].substring(0, 3) : players[i];
+
+          return (
+            <Col className="grid-item" key={`name-${i}`}>
+              {displayName}
+              <br />
+              <strong>{scores[i]}</strong>
+            </Col>
+          );
+        })}
       </>
     );
 
-    // Score Table Rows (Round Number + Player Scores for that Round)
     setScoreGrid(
       rows.map((row) => (
         <Row className="scoreRow" key={`row-${row}`}>
@@ -113,9 +154,15 @@ const Molkky = () => {
     );
   };
 
+  const createEmptyStatsObj = () => ({
+    p0: 0, p1: 0, p2: 0, p3: 0, p4: 0, p5: 0,
+    p6: 0, p7: 0, p8: 0, p9: 0, p10: 0, p11: 0, p12: 0
+  });
+
   const showStartGrid = () => {
     const playerAmount = parseInt(localStorage.getItem('playerAmount') || '0', 10);
-    const shortenNames = playerAmount > 5;
+    const isTeamGame = localStorage.getItem("teamGame") === "true";
+    const shortenNames = playerAmount > 5 && !isTeamGame;
     const players = [];
     const scores = [];
     const strikes = [];
@@ -123,18 +170,38 @@ const Molkky = () => {
     const playerScoreList = [];
     const molkkyPlayerScores = [];
 
-    for (let i = 0; i < playerAmount; i++) {
-      const player = localStorage.getItem(`player${i}`);
-      if (player !== null) {
-        molkkyPlayerScores.push(new MolkkyPlayerScore(player));
-        playerScoreList.push({
-          p0: 0, p1: 0, p2: 0, p3: 0, p4: 0, p5: 0,
-          p6: 0, p7: 0, p8: 0, p9: 0, p10: 0, p11: 0, p12: 0
-        });
-        players.push(player);
+
+    let loadedTeams = [];
+    const individualMemberStats = {};
+
+    if (isTeamGame) {
+      loadedTeams = getTeamsFromStorage();
+      for (let i = 0; i < loadedTeams.length; i++) {
+        // Generate formatted display name: "Nikke" + "Onni" -> "Ni & On"
+        const formattedTeamName = formatTeamDisplayName(loadedTeams[i]);
+        
+        molkkyPlayerScores.push(new MolkkyPlayerScore(formattedTeamName));
+        playerScoreList.push(createEmptyStatsObj());
+        players.push(formattedTeamName);
         scores.push(0);
         strikes.push(0);
         playerLost.push(false);
+
+        loadedTeams[i].members.forEach((member) => {
+          individualMemberStats[member] = createEmptyStatsObj();
+        });
+      }
+    } else {
+      for (let i = 0; i < playerAmount; i++) {
+        const player = localStorage.getItem(`player${i}`);
+        if (player !== null) {
+          molkkyPlayerScores.push(new MolkkyPlayerScore(player));
+          playerScoreList.push(createEmptyStatsObj());
+          players.push(player);
+          scores.push(0);
+          strikes.push(0);
+          playerLost.push(false);
+        }
       }
     }
 
@@ -151,7 +218,10 @@ const Molkky = () => {
       winner: null,
       someoneHasWon: false,
       shortenNames,
-      molkkyPlayerScores
+      molkkyPlayerScores,
+      isTeamGame,
+      teams: loadedTeams,
+      individualMemberStats
     };
 
     setGameEnded(false);
@@ -179,6 +249,13 @@ const Molkky = () => {
     const point = `p${numResult}`;
     state.playerScoreList[playerToUpdate][point]++;
 
+    if (state.isTeamGame && state.teams[playerToUpdate]) {
+      const activeMember = state.teams[playerToUpdate].returnCurrentPlayer();
+      if (activeMember && state.individualMemberStats[activeMember]) {
+        state.individualMemberStats[activeMember][point]++;
+      }
+    }
+
     if (state.scores[playerToUpdate] === 50) {
       if (!state.someoneHasWon) winnerFound();
       else alert(`${state.players[state.currentPlayer]} saavutti 50 pistettä!`);
@@ -204,6 +281,13 @@ const Molkky = () => {
     const point = `p${numResult}`;
     state.playerScoreList[playerToUpdate][point]--;
 
+    if (state.isTeamGame && state.teams[playerToUpdate]) {
+      const activeMember = state.teams[playerToUpdate].returnCurrentPlayer();
+      if (activeMember && state.individualMemberStats[activeMember]) {
+        state.individualMemberStats[activeMember][point]--;
+      }
+    }
+
     if (state.someoneHasWon && state.winner === state.players[state.currentPlayer]) {
       state.winner = null;
       state.someoneHasWon = false;
@@ -218,6 +302,10 @@ const Molkky = () => {
     state.allScores.push(newScore);
 
     updateScore(state.currentPlayer, newScore);
+
+    if (state.isTeamGame && state.teams[state.currentPlayer]) {
+      state.teams[state.currentPlayer].nextPlayer();
+    }
 
     state.currentPlayer++;
     if (state.currentPlayer === state.players.length) {
@@ -278,6 +366,10 @@ const Molkky = () => {
       state.rows.pop();
     }
 
+    if (state.isTeamGame && state.teams[state.currentPlayer]) {
+      state.teams[state.currentPlayer].previousPlayer();
+    }
+
     removeScore(state.currentPlayer, lastScore);
 
     while (state.playerLost[state.currentPlayer] && state.allScores.length > 0) {
@@ -298,18 +390,42 @@ const Molkky = () => {
   const saveGame = () => {
     if (!window.confirm('Haluatko tallentaa pelin tietokantaan')) return;
 
-    const { players, playerScoreList, winner } = stateRef.current;
+    const { players, playerScoreList, winner, isTeamGame, teams, individualMemberStats } = stateRef.current;
     const body = {};
+    let winnerPlayers = [];
 
-    for (let i = 0; i < players.length; i++) {
-      body[`pelaaja${i + 1}`] = {
-        nimi: players[i],
-        ...playerScoreList[i]
-      };
+    if (isTeamGame) {
+      let counter = 1;
+      Object.keys(individualMemberStats).forEach((memberName) => {
+        body[`pelaaja${counter}`] = {
+          nimi: memberName,
+          ...individualMemberStats[memberName]
+        };
+        counter++;
+      });
+
+      // Match winning team by formatted name or direct team lookup
+      const winningTeamIdx = players.indexOf(winner);
+      const winningTeamObj = winningTeamIdx !== -1 ? teams[winningTeamIdx] : null;
+
+      if (winningTeamObj && Array.isArray(winningTeamObj.members)) {
+        winnerPlayers = winningTeamObj.members;
+      }
+    } else {
+      for (let i = 0; i < players.length; i++) {
+        body[`pelaaja${i + 1}`] = {
+          nimi: players[i],
+          ...playerScoreList[i]
+        };
+      }
+      if (winner) {
+        winnerPlayers = [winner];
+      }
     }
 
     body.ryhman_nimi = localStorage.getItem('group');
-    body.voittajan_nimi = winner;
+    body.voittajat = winnerPlayers;
+    body.voittajan_nimi = winnerPlayers[0] || winner;
 
     const today = new Date();
     body.pvm = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -318,9 +434,16 @@ const Molkky = () => {
     xmlhttp.open('POST', `${API_URL}/api/newgame`, true);
     xmlhttp.setRequestHeader('Content-Type', 'application/json');
     xmlhttp.onload = () => {
-      alert('Peli tallennettu!');
-      clearGameState();
-      setDisable(true);
+      if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
+        alert('Peli tallennettu!');
+        clearGameState();
+        setDisable(true);
+      } else {
+        alert(`Virhe tallennuksessa: ${xmlhttp.responseText}`);
+      }
+    };
+    xmlhttp.onerror = () => {
+      alert('Tietokantayhteys epäonnistui!');
     };
     xmlhttp.send(JSON.stringify(body));
   };
@@ -352,6 +475,10 @@ const Molkky = () => {
           return instance;
         });
 
+        if (parsedState.isTeamGame && Array.isArray(parsedState.teams)) {
+          parsedState.teams = parsedState.teams.map((t) => new Team(t));
+        }
+
         stateRef.current = parsedState;
         setGameEnded(false);
         if (parsedState.someoneHasWon) setDisable(false);
@@ -379,7 +506,14 @@ const Molkky = () => {
         <div ref={scoresEndRef} />
       </Container>
       <Container className="molkkyButtonContainer">
-        <h3 ref={h3}>{gameInstruction}</h3>
+        <h3
+          ref={h3}
+          onClick={handleInstructionClick}
+          style={stateRef.current.isTeamGame ? { cursor: 'pointer', userSelect: 'none' } : {}}
+          title={stateRef.current.isTeamGame ? 'Vaihda heittäjää napauttamalla' : ''}
+        >
+          {gameInstruction}
+        </h3>
         <Row className="molkkyButtonRow">
           <div className="col"><Button className="molkkyButton" onClick={() => addNewScore(7)} disabled={gameEnded}>7</Button></div>
           <div className="col"><Button className="molkkyButton" onClick={() => addNewScore(9)} disabled={gameEnded}>9</Button></div>
