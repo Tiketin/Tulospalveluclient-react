@@ -21,7 +21,7 @@ const NewGame = () => {
     useEffect(() => {
         if(localStorage.getItem("mode") === "dark"){
             document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
-            h1.current.style.color = "white";
+            h1.current.style.color = "navajowhite";
         }
         else {
             document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
