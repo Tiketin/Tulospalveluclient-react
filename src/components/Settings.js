@@ -23,8 +23,8 @@ const Settings = () => {
     useEffect(() => {
         if(localStorage.getItem("mode") === "dark"){
             document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
-            h1.current.style.color = "white";
-            h2.current.style.color = "white";
+            h1.current.style.color = "navajowhite";
+            h2.current.style.color = "navajowhite";
         }
         else {
             document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
@@ -38,8 +38,8 @@ const Settings = () => {
 
     function changeDarkmode() {
         document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
-        h1.current.style.color = "white";
-        h2.current.style.color = "white";
+        h1.current.style.color = "navajowhite";
+        h2.current.style.color = "navajowhite";
         localStorage.setItem("mode", "dark");
         console.log(localStorage.getItem("mode"));
     }

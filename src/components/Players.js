@@ -126,7 +126,7 @@ const Players = () => {
   useEffect(() => {
     if(localStorage.getItem("mode") === "dark"){
       document.body.style.backgroundImage = "url('/images/darkmode.jpg')";
-      h1.current.style.color = "white";
+      h1.current.style.color = "navajowhite";
     }
     else {
       document.body.style.backgroundImage = "url('/images/taustakuva.jpg')";
@@ -162,7 +162,7 @@ const Players = () => {
             {playerTable}
             </tbody>
           </Table>
-          <div>
+          <div className='boldText'>
             Joukkueet
             <input id='teamcheckbox' className="form-check-input" type="checkbox" defaultChecked={false} onChange={isTeamCheckboxChecked}/>
           </div>
