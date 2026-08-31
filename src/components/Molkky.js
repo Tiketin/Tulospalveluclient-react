@@ -23,6 +23,8 @@ const Molkky = () => {
   const scoresEndRef = useRef(null);
   const h3 = useRef(null);
 
+  const isStrikesChecked = localStorage.getItem("isStrikesChecked") === "true";
+
   const stateRef = useRef({
     scores: [],
     strikes: [],
@@ -259,7 +261,8 @@ const Molkky = () => {
     if (state.scores[playerToUpdate] === 50) {
       if (!state.someoneHasWon) winnerFound();
       else alert(`${state.players[state.currentPlayer]} saavutti 50 pistettä!`);
-    } else if (state.strikes[playerToUpdate] >= 3) {
+    } else if (state.strikes[playerToUpdate] >= 3 && isStrikesChecked) {
+      console.log("TIPPUI")
       state.playerLost[playerToUpdate] = true;
     }
 

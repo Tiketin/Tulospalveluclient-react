@@ -16,7 +16,8 @@ const Players = () => {
   const navigate = useNavigate();
   const table = useRef();
   const hasFetched = useRef(false);
-  let isChecked = false;
+  let isTeamsChecked = false;
+  let isStrikesChecked = true;
   let json;
   let players = [];
   let player;
@@ -107,7 +108,8 @@ const Players = () => {
       localStorage.setItem("player" + i, playersToAdd[i]);
     }
     localStorage.setItem("playerAmount", playerAmount.toString());
-    if (isChecked) {
+    localStorage.setItem("isStrikesChecked", isStrikesChecked)
+    if (isTeamsChecked) {
       handleTeamSelection();
     }
     else {
@@ -120,7 +122,11 @@ const Players = () => {
   }
 
   const isTeamCheckboxChecked = (e) => {
-    isChecked = e.target.checked;
+    isTeamsChecked = e.target.checked;
+  };
+
+  const isStrikesCheckboxChecked = (e) => {
+    isStrikesChecked = e.target.checked;
   };
 
   useEffect(() => {
@@ -165,6 +171,10 @@ const Players = () => {
           <div className='boldText'>
             Joukkueet
             <input id='teamcheckbox' className="form-check-input" type="checkbox" defaultChecked={false} onChange={isTeamCheckboxChecked}/>
+          </div>
+          <div className='boldText'>
+            Tippuminen
+            <input id='strikescheckbox' className="form-check-input" type="checkbox" defaultChecked={true} onChange={isStrikesCheckboxChecked}/>
           </div>
           <Button onClick={initializePlayers} size="sm">Eteenpäin</Button>
         </Form>
